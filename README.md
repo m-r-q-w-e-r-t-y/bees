@@ -1,6 +1,5 @@
 # Description
 
-
 # Links
 | Item                        | Link                                                                                    |
 | :--                          | :--                                                                                      |
