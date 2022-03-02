@@ -14,8 +14,6 @@ Node.js framework providing HTTP utilities that implement headers and routing [^
 **Use Case**  
 Will be used to create routings and actions in the backend
 
-
-
 ## Nodemon
 **Description**  
 “A tool that helps develop Node.js based applications by automatically restarting the node application when file changes in the directory are detected”[^3]
