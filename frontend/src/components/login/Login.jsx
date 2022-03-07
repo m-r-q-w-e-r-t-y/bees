@@ -6,7 +6,7 @@ import LoginButton from './LoginButton.svg'
 
 function LoginForm() {
     return (
-        <form login>
+        <form action="http://localhost:5000/login" method="POST">
             <button className='loginbutton'>
                 <img src={LoginButton} />
             </button>
