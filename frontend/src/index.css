@@ -5,9 +5,89 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #062743;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+signin {
+  font-family: Gilroy;
+  font-style: 'Roboto';
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 43px;
+  color:white;
+}
+
+form .form-inner {
+  position:relative;
+  left: 732px;
+  top: 173px;
+}
+
+input[type=text]{
+  width: 317px;
+  border: #062743;
+  border-radius: 9px;
+  height: 55px;
+  padding-left: 36px;
+}
+
+input[type=password]{
+  position: relative;
+  top: 31px;
+  width: 317px;
+  height: 55px;
+  border: #062743;
+  padding-left: 36px;
+  border-radius: 9px;
+}
+
+form .loginbutton {
+  position: relative;
+  top: 600px;
+  left: 1000px;
+}
+
+form .user {
+  z-index: 1;
+  position: relative;
+  left: 740px;
+  top: 260px;
+}
+
+form .lock {
+  z-index: 1;
+  position: relative;
+  left: 744px;
+  top: 374px;
+}
+
+form .eye {
+  z-index: 1;
+  position: relative;
+  left: 1050px;
+  top: 400px;
+}
+
+button {
+  background: none;
+  border: none;
+}
+
+forgot {
+  left: 880px;
+  top: 210px;
+  position: relative;
+  color: #FF4B26;
+}
+
+register {
+  left: 732px;
+  top: 210px;
+  position: relative;
+  color: #26FFA4;
 }
