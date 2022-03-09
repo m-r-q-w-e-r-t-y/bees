@@ -1,11 +1,27 @@
+import React from 'react'
+import { Route, Routes } from 'react-router-dom'
 import Login from './components/login/Login'
+import Register from './components/register/Register'
+
+const NotFound = () => {
+
+  return(
+    <React.Fragment>
+        <h1 style={{fontSize: '10rem', color:'blue'}}>Not Found</h1>
+    </React.Fragment>
+  )
+}
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Login></Login>
       </header>
+        <Routes>
+          <Route path="/login" element={<Login></Login>} />
+          <Route path="/register" element={<Register></Register>} />   
+          <Route path="*" element={<NotFound/>}/>  
+        </Routes>
     </div>
   );
 }
