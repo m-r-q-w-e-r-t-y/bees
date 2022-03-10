@@ -22,13 +22,13 @@ function LoginForm() {
             </div>
             <div className="txtfields">
                 <label className="email">
-                    <input type="text" placeholder='Username or Email Address' />
-                </label>
+                    <input type="text" placeholder='Username or Email Address' id='email' name='email'/>
+                </label><br></br>
                 <label className="password">
-                    <input type={passwordShown ? "text" : "password"} placeholder='Password' />
-                </label>
+                    <input type={passwordShown ? "text" : "password"} placeholder='Password' id='password' name='password'/>
+                </label><br></br>
                 <label className="confirmpassword">
-                    <input type={passwordShown ? "text" : "password"} placeholder='Confirm password' />
+                    <input type={passwordShown ? "text" : "password"} placeholder='Confirm password' id='confirmpassword' name='confirmpassword'/>
                 </label>
                 <div className='userregister'>
                     <User></User>

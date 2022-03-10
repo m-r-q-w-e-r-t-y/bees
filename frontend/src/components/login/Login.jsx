@@ -21,11 +21,11 @@ function LoginForm() {
                 <signin>Sign In</signin>
             </div>
             <div className="txtfields">
-                <label className="email">
-                    <input name ="email" type="text" placeholder='Username or Email Address' />
-                </label>
+                <label class="email">
+                    <input name="email" type="text" placeholder='Username or Email Address' id='email'/>
+                </label><br></br>
                 <label className="password">
-                    <input name="password" type={passwordShown ? "text" : "password"} placeholder='Password' />
+                    <input name="password" type={passwordShown ? "text" : "password"} placeholder='Password' id='password'/>
                 </label>
                 <div className='user'>
                     <User></User>
@@ -40,9 +40,9 @@ function LoginForm() {
                 </button>
             </div>
             <form action="http://localhost:5000/register" method="POST" className='register'>
-                    <button className='registertxt'>
-                        Register here
-                    </button>
+                <button className='registertxt'>
+                    Register here
+                </button>
             </form>
             <form action="http://localhost:5000/forgot" method="POST" className='forgot'>
                 <button className='forgottxt'>
@@ -66,8 +66,8 @@ function LoginForm() {
                 </div>
             </form>
             <div className='eye'>
-                    <img src={Eye} />
-                </div>
+                <img src={Eye} />
+            </div>
         </form>
     )
 }
