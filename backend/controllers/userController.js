@@ -10,9 +10,6 @@ const loginPage = (req, res) => {
   res.json({ message: "Login Page" });
 };
 
-// const authenticateUser = (req, res) => {
-//   res.json({ message: "Authenticating User" });
-// };
 
 // @desc    Get register page
 // @route   GET /register
@@ -20,6 +17,7 @@ const loginPage = (req, res) => {
 const registerPage = (req, res) => {
   res.json({ message: "Register User" });
 };
+
 
 // @desc    Submit new user
 // @route   POST /register
@@ -55,10 +53,9 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid user data");
   }
-
-  //   res.json({ name: `name`, email: `email`, password: `password` });
-  //   res.json({ name: "Register User" });
 });
+
+
 // @desc    Authenticate user
 // @route   POST /login
 // @access  Public
