@@ -18,9 +18,8 @@ function App() {
       <header className="App-header">
       </header>
         <Routes>
-          <Route path="/login" element={<Login></Login>} />
+          <Route path="*" element={<Login></Login>} />
           <Route path="/register" element={<Register></Register>} />   
-          <Route path="*" element={<NotFound/>}/>  
         </Routes>
     </div>
   );
