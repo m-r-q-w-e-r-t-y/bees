@@ -19,7 +19,7 @@ function App() {
       </header>
         <Routes>
           <Route path="*" element={<Login></Login>} />
-          <Route path="/register" element={<Register></Register>} />
+          <Route path="/register" element={<Register></Register>} />   
         </Routes>
     </div>
   );

@@ -8,7 +8,7 @@ import GoogleButton from './Google.svg'
 import AppleButton from './AppleID.svg'
 import FacebookButton from './Facebook.svg'
 
-function LoginForm() {
+function RegisterForm() {
 
     const [passwordShown, setPasswordShown] = useState(false);
     const togglePassword = () => {
@@ -70,4 +70,4 @@ function LoginForm() {
     )
 }
 
-export default LoginForm
+export default RegisterForm

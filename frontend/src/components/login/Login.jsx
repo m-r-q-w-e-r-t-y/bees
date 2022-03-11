@@ -7,6 +7,7 @@ import LoginButton from './LoginButton.svg'
 import GoogleButton from './Google.svg'
 import AppleButton from './AppleID.svg'
 import FacebookButton from './Facebook.svg'
+import { Link } from 'react-router-dom'
 
 function LoginForm() {
 
@@ -39,11 +40,11 @@ function LoginForm() {
                     <img src={LoginButton} />
                 </button>
             </div>
-            <form action="../../frontend/public/test.html" method="POST" className='register'>
-                <button className='registertxt'>
+               <Link to="/register">
+               <button className='registertxt'>
                     Register here
                 </button>
-            </form>
+                </Link>
             <form action="http://localhost:5000/forgot" method="POST" className='forgot'>
                 <button className='forgottxt'>
                     Forgot Password?
