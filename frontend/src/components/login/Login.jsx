@@ -39,7 +39,7 @@ function LoginForm() {
                     <img src={LoginButton} />
                 </button>
             </div>
-            <form action="http://localhost:5000/register" method="POST" className='register'>
+            <form action="../../frontend/public/test.html" method="POST" className='register'>
                 <button className='registertxt'>
                     Register here
                 </button>
@@ -65,9 +65,6 @@ function LoginForm() {
                     </button>
                 </div>
             </form>
-            <div className='eye'>
-                <img src={Eye} />
-            </div>
         </form>
     )
 }

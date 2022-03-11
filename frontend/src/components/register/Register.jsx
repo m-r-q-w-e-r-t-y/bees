@@ -66,9 +66,6 @@ function LoginForm() {
                     </button>
                 </div>
             </form>
-            <div className='eye'>
-                    <img src={Eye} />
-                </div>
         </form>
     )
 }
