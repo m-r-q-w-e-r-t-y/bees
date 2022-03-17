@@ -1,12 +1,12 @@
 import React from 'react'
 import { useState } from 'react'
-import { ReactComponent as User } from './User.svg'
+import User from './User.png'
 import Lock from './lock.png'
 import Eye from './eye.png'
-import LoginButton from './LoginButton.svg'
-import GoogleButton from './Google.svg'
-import AppleButton from './AppleID.svg'
-import FacebookButton from './Facebook.svg'
+import LoginButton from './LoginButton.png'
+import GoogleButton from './Google.png'
+import AppleButton from './AppleID.png'
+import FacebookButton from './Facebook.png'
 import { Link } from 'react-router-dom'
 
 function LoginForm() {
@@ -17,42 +17,46 @@ function LoginForm() {
     }
 
     return (
-        <form action="http://localhost:5000/login" method="POST">
-            <div className='signin'>
-                <signin>Sign In</signin>
-            </div>
-            <div className="txtfields">
-                <label class="email">
-                    <input name="email" type="text" placeholder='Username or Email Address' id='email'/>
-                </label><br></br>
-                <label className="password">
-                    <input name="password" type={passwordShown ? "text" : "password"} placeholder='Password' id='password'/>
-                </label>
-                <div className='user'>
-                    <User></User>
+        <div>
+            <form action="http://localhost:5000/login" method="POST">
+                <div className='signin'>
+                    <label>Sign In</label>
                 </div>
-                <div className='lock'>
-                    <img src={Lock} />
+                <div className="txtfields">
+                    <label className="email">
+                        <input name="email" type="text" placeholder='Username or Email Address' id='email' />
+                    </label><br></br>
+                    <label className="password">
+                        <input name="password" type={passwordShown ? "text" : "password"} placeholder='Password' id='password' />
+                    </label>
+                    <div className='user'>
+                        <img src={User} />
+                    </div>
+                    <div className='lock'>
+                        <img src={Lock} />
+                    </div>
                 </div>
-            </div>
-            <div className='loginbutton'>
-                <button>
-                    <img src={LoginButton} />
-                </button>
-            </div>
-               <Link to="/register">
-               <button className='registertxt'>
-                    Register here
-                </button>
-                </Link>
-            <form action="http://localhost:5000/forgot" method="POST" className='forgot'>
-                <button className='forgottxt'>
-                    Forgot Password?
-                </button>
+                <div className='loginbutton'>
+                    <button>
+                        <img src={LoginButton} />
+                    </button>
+                </div>
+                <div className='redirect'>
+                    <Link to="/register">
+                        <label className='registertxt'>
+                            Register here
+                        </label>
+                    </Link>
+                    <Link to="/forgot">
+                        <label className='forgottxt'>
+                            Forgot Password?
+                        </label>
+                    </Link>
+                </div>
+                <div className='signinwith'>
+                    <label className='signinwithtxt'>sign in with</label>
+                </div>
             </form>
-            <div className='signinwith'>
-                <label className='signinwithtxt'>sign in with</label>
-            </div>
             <form action="http://localhost:5000/" method="POST">
                 <div className='threebuttons'>
                     <button className='googlebutton'>
@@ -66,7 +70,7 @@ function LoginForm() {
                     </button>
                 </div>
             </form>
-        </form>
+        </div>
     )
 }
 

@@ -23,6 +23,16 @@ code {
   margin-right: 280px;
 }
 
+.resetpassword {
+  margin-top: 200px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 43px;
+  color: white;
+  margin-right: 150px;
+}
+
 .txtfields {
   text-align: center;
   z-index: 0;
@@ -94,22 +104,31 @@ button {
   padding-left: 230px;
 }
 
+.redirect {
+  position:relative;
+  text-align:center;
+}
+
+.redirectback {
+  position:relative;
+  text-align:center;
+}
+
 .forgottxt {
   color: #FF4B26;
   font-weight: bold;
-}
-
-.register {
   position: relative;
-  text-align: center;
   top: -150px;
-  padding-right: 260px;
-  z-index: 1;
 }
 
 .registertxt {
   color: #26FFA4;
   font-weight: bold;
+  position: relative;
+  top: -150px;
+  margin-right: 120px;
+  z-index: 1;
+  text-align: center;
 }
 
 .signinwith {
@@ -189,6 +208,11 @@ button {
 .logintxt {
   color: #FF4B26;
   font-weight: bold;
+  position: relative;
+  top: -150px;
+  z-index: 1;
+  margin-right: -180px;
+  text-align: center;
 }
 
 .signup {
@@ -199,4 +223,59 @@ button {
   line-height: 43px;
   color: white;
   margin-right: 260px;
+}
+
+.resetinstructions {
+  margin-top: 10px;
+  text-align: center;
+}
+
+
+.asterisk {
+  color: gold;
+  margin-left: -40px;
+}
+
+.SendMessagetxt {
+  color: white;
+  opacity: 50%;
+}
+
+.sendMessagetxtcontinued {
+  margin-left: -200px;
+  color: white;
+  opacity: 50%;
+}
+
+.SendCodetxt {
+  position: relative;
+  top: -20px;
+  color: white;
+  left: -230px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.mail {
+  position: relative;
+  pointer-events: none;
+  text-align: center;
+  top: -93px;
+  padding-right: 315px;
+  z-index: 1;
+}
+
+.changepassword {
+  margin-top: 200px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 43px;
+  color: white;
+  margin-right: 150px;
+}
+
+.login2 {
+  position: relative;
+  right: 60px;
 }
