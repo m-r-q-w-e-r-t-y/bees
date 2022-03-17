@@ -16,19 +16,19 @@ function LoginForm() {
     }
 
     return (
-        <form action="http://localhost:5000/login" method="POST">
+        <form action="http://localhost:5000/register" method="POST">
             <div className='signup'>
                 <signup>Sign Up</signup>
             </div>
             <div className="txtfields">
                 <label className="email">
-                    <input type="text" placeholder='Username or Email Address' id='email' name='email'/>
+                    <input type="text" placeholder='Username' id='email' name='name'/>
                 </label><br></br>
                 <label className="password">
-                    <input type={passwordShown ? "text" : "password"} placeholder='Password' id='password' name='password'/>
+                    <input type={passwordShown ? "text" : "password"} placeholder='email' id='password' name='email'/>
                 </label><br></br>
                 <label className="confirmpassword">
-                    <input type={passwordShown ? "text" : "password"} placeholder='Confirm password' id='confirmpassword' name='confirmpassword'/>
+                    <input type={passwordShown ? "text" : "password"} placeholder='password' id='confirmpassword' name='password'/>
                 </label>
                 <div className='userregister'>
                     <User></User>
