@@ -3,9 +3,6 @@ import { useState } from 'react'
 import User from './User.png'
 import Lock from './lock.png'
 import LoginButton from './LoginButton.png'
-import GoogleButton from './Google.png'
-import AppleButton from './AppleID.png'
-import FacebookButton from './Facebook.png'
 import { Link } from 'react-router-dom'
 
 function ChangePasswordForm() {
@@ -16,13 +13,13 @@ function ChangePasswordForm() {
     }
 
     return (
-        <form action="http://localhost:5000/register" method="POST">
+        <form action="http://localhost:5000/reset" method="POST">
             <div className='changepassword'>
                 <label>Change Password</label>
             </div>
             <div className="txtfields">
                 <label className="email">
-                    <input type="text" placeholder='Code' id='email' name='email' />
+                    <input type="text" placeholder='Code' id='email' name='email' className='emailfield'/>
                 </label><br></br>
                 <label className="password">
                     <input type={passwordShown ? "text" : "password"} placeholder='New password' id='password' name='password' />
@@ -41,11 +38,11 @@ function ChangePasswordForm() {
                 </div>
             </div>
             <div className='loginbutton'>
-                <Link to="/login">
+
                 <button>
                     <img src={LoginButton} />
                 </button>
-                </Link>
+
             </div>
             <div className='redirectback'>
                 <Link to="/login">

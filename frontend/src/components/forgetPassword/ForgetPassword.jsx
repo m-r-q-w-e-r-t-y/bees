@@ -18,7 +18,7 @@ function ForgetPasswordForm() {
             </div>
             <div className="txtfields">
                 <label className="email">
-                    <input type="text" placeholder='Enter your email address' id='email' name='email'/>
+                    <input type="text" placeholder='Enter your email address' id='email' name='email' className='emailfield'/>
                 </label><br></br>
             </div>
             <div className='resetinstructions'>
@@ -38,12 +38,10 @@ function ForgetPasswordForm() {
                 <label className='SendCodetxt'>
                     Send Code
                 </label>
-                <Link to="/reset">
+
                     <button className='login2'>
                         <img src={LoginButton} />
                     </button>
-                </Link>
-
             </div>
         </form>
     )

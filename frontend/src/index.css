@@ -38,7 +38,7 @@ code {
   z-index: 0;
 }
 
-input[type=text]{
+.emailfield{
   top: 31px;
   width: 317px;
   height: 55px;

@@ -7,14 +7,9 @@ import LoginButton from './LoginButton.png'
 import GoogleButton from './Google.png'
 import AppleButton from './AppleID.png'
 import FacebookButton from './Facebook.png'
-import { Link } from 'react-router-dom'
+import { Link, use } from 'react-router-dom'
 
 function LoginForm() {
-
-    const [passwordShown, setPasswordShown] = useState(false);
-    const togglePassword = () => {
-        setPasswordShown(!passwordShown);
-    }
 
     return (
         <div>
@@ -24,10 +19,10 @@ function LoginForm() {
                 </div>
                 <div className="txtfields">
                     <label className="email">
-                        <input name="email" type="text" placeholder='Username or Email Address' id='email' />
+                        <input name="email" type="text" placeholder='Username or Email Address' id='email' className='emailfield'/>
                     </label><br></br>
                     <label className="password">
-                        <input name="password" type={passwordShown ? "text" : "password"} placeholder='Password' id='password' />
+                        <input name="password" type="password" placeholder='Password' id='password' />
                     </label>
                     <div className='user'>
                         <img src={User} />
@@ -37,7 +32,7 @@ function LoginForm() {
                     </div>
                 </div>
                 <div className='loginbutton'>
-                    <button>
+                    <button >
                         <img src={LoginButton} />
                     </button>
                 </div>

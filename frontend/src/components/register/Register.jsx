@@ -6,14 +6,10 @@ import LoginButton from './LoginButton.png'
 import GoogleButton from './Google.png'
 import AppleButton from './AppleID.png'
 import FacebookButton from './Facebook.png'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 function RegisterForm() {
-
-    const [passwordShown, setPasswordShown] = useState(false);
-    const togglePassword = () => {
-        setPasswordShown(!passwordShown);
-    }
+    const navigate = useNavigate()
 
     return (
         <div>
@@ -23,13 +19,13 @@ function RegisterForm() {
                 </div>
                 <div className="txtfields">
                     <label className="email">
-                        <input type="text" placeholder='Username or Email Address' id='email' name='email' />
+                        <input type="email" placeholder='Username or Email Address' id='email' name='email' className='emailfield' />
                     </label><br></br>
                     <label className="password">
-                        <input type={passwordShown ? "text" : "password"} placeholder='Password' id='password' name='password' />
+                        <input type="password" placeholder='Password' id='password' name='password' />
                     </label><br></br>
                     <label className="confirmpassword">
-                        <input type={passwordShown ? "text" : "password"} placeholder='Confirm password' id='confirmpassword' name='confirmpassword' />
+                        <input type="password" placeholder='Confirm password' id='confirmpassword' name='name' />
                     </label>
                     <div className='userregister'>
                         <img src={User} />
@@ -42,11 +38,9 @@ function RegisterForm() {
                     </div>
                 </div>
                 <div className='loginbutton'>
-                    <Link to="/login">
-                        <button>
-                            <img src={LoginButton} />
-                        </button>
-                    </Link>
+                    <button>
+                        <img src={LoginButton} />
+                    </button>
                 </div>
                 <div className='redirectback'>
                     <Link to="/login">
