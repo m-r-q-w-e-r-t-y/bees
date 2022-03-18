@@ -1,5 +1,43 @@
 # Backend Documentation
 
+## How to Use Backend
+|   Folder          |   Description                                                             |
+|   --              |   --                                                                      |
+|   `config`        |   Connects to MongoDB                                                     |
+|   `controllers`   |   Tells the server what to do for a request                               |
+|   `middleware`    |   Does nothing at the moment. Will be used to show error page             |
+|   `models`        |   Like a Class but for MongoDB. We will have user class in MongoDB        |
+|   `routes`        |   Tells server where users can go (Ex: Can go to '/login' or '/register'  |
+
+When you see `'/..something here..'` it means users can go to `'localhost:5000/...something here...'`
+If you want to add a location users can go to (Ex: Can go to note page buy going to `'localhost:5000/note'`) you need to add `'/note'` on the routes page.
+
+When you want to tell the backend what to do when they get there, go to `controllers` folder and add another **const** variable that follows the format:
+
+```js
+const /*...something...*/ = (req, res) => {
+    /*...do something here...*/
+};
+```
+
+If you want to hash password follow this tutorial: https://www.youtube.com/watch?v=enopDSs3DRw&t=826s
+
+Right now, the controller page still needs hash password implementation
+
+```js
+// @desc    Authenticate user
+// @route   POST /login
+// @access  Public
+const authenticateUser = (req, res) => {
+    res.json({message: 'Authenticating User'});
+    /*...implementation goes here, delete above when you get started...*/
+};
+```
+
+
+
+
+
 ## Node.js (v14.17.3)
 **Description**  
 Node.js is an asynchronous event-driven JavaScript runtime [^1]
