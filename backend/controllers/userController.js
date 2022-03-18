@@ -52,11 +52,16 @@ const registerUser = asyncHandler(async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
+  //Default token
+  const Str = require('@supercharge/strings')
+  const token = Str.random(50)
+
   //Create User
   const user = await User.create({
     name,
     email,
     password: hashedPassword,
+    token: token,
   });
   if (user) {
     res.status(201).json({
@@ -102,6 +107,7 @@ const forgottenUser = asyncHandler(async (req, res) => {
     throw new Error(`Please add all fields\n${email}`);
   }
 
+
   res.json({
     email: email,
   });
@@ -120,22 +126,8 @@ const forgottenUser = asyncHandler(async (req, res) => {
       console.log(info);
     }
   })
-
-  //Create User
-  const forgottenUser1 = await forgotUser.create({
-    email,
-    token: token,
-  });
-  if (user) {
-    res.status(201).json({
-      email: forgottenUser1.email,
-    });
-  } else {
-    res.status(400);
-    throw new Error("Invalid user data");
-  }
-
-});
+  
+})
 
 // @desc    Change password
 // @route   POST /reset
@@ -149,15 +141,23 @@ const resetUser = asyncHandler(async (req, res) => {
       password: password,
     });
   }
-    else {
+  else {
     res.status(400);
     throw new Error("Invalid user data");
   }
 
-  const filter = { email: 'mrj26@buffalo.edu' };
+  const filter = { email: "mrj26@buffalo.edu" };
   const update = { password: 'matt' };
 
+  res.status(201).json({
+    password: user.password,
+  });
+
   const resetpassworduser = await User.findByIdAndUpdate(filter, update);
+
+  res.status(201).json({
+    password: user.password,
+  });
 });
 
 

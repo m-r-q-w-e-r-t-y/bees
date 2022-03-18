@@ -13,6 +13,10 @@ const userSchema = mongoose.Schema({
         type: String,
         required: [true, 'Please add a password'],
     }, 
+    token: {
+        type: String,
+        require: [false, ''],
+    }
 }, {
     timestamps: true,
 });
@@ -21,17 +25,17 @@ const userSchema = mongoose.Schema({
 
 module.exports = mongoose.model('User', userSchema)
 
-const forgotSchema = mongoose.Schema({
-    email: {
-        type: String,
-        required: [true, 'Please add an email'],
-    },
-    token: {
-        type: String,
-        required: [true, 'Please add a token'],
-    }, 
-}, {
-    timestamps: true,
-});
+// const forgotSchema = mongoose.Schema({
+//     email: {
+//         type: String,
+//         required: [true, 'Please add an email'],
+//     },
+//     token: {
+//         type: String,
+//         required: [true, 'Please add a token'],
+//     }, 
+// }, {
+//     timestamps: true,
+// });
 
-module.exports = mongoose.model('forgotUser', forgotSchema)
+// module.exports = mongoose.model('forgotUser', forgotSchema)
