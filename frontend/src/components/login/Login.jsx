@@ -67,7 +67,9 @@ function LoginForm() {
                     </div>
                 </div>
                 <div className='loginbutton'>
-                    <input type="submit" value="Submit"/>
+                <button>
+                        <img src={LoginButton} />
+                    </button>
                 </div>
                 <div className='redirect'>
                     <Link to="/register">
