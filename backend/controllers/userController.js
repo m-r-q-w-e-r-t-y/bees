@@ -107,25 +107,33 @@ const forgottenUser = asyncHandler(async (req, res) => {
     throw new Error(`Please add all fields\n${email}`);
   }
 
-
-  res.json({
-    email: email,
-  });
   const Str = require('@supercharge/strings')
   const token = Str.random(50)
-  let mailOptions = {
-    from: "noreply1bees@gmail.com",
-    to: email,
-    subject: "Reset Token",
-    html: "token code:" + token
-  }
-  transporter.sendMail(mailOptions, function (err, info) {
-    if (err) {
-      console.log(err)
-    } else {
-      console.log(info);
+  const filter = { email: email };
+  const update = { token: token };
+
+  const userExists = await User.findOneAndUpdate( filter, update);
+
+  if(userExists){
+    res.json({
+      email: userExists
+    })
+    let mailOptions = {
+      from: "noreply1bees@gmail.com",
+      to: email,
+      subject: "Reset Token",
+      html: "token code:" + token
     }
-  })
+    transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log(info);
+      }
+    })
+  }
+
+
   
 })
 
@@ -133,31 +141,30 @@ const forgottenUser = asyncHandler(async (req, res) => {
 // @route   POST /reset
 // @access  Public
 const resetUser = asyncHandler(async (req, res) => {
-  const { token, password, confirmNewPassword } = req.body;
-  const user = await forgotUser.find({ token })
+  const { token, password, confirmPassword } = req.body;
 
-  if (user) {
-    res.json({
-      password: password,
-    });
-  }
-  else {
+    if (!token || !password || !confirmPassword) {
     res.status(400);
-    throw new Error("Invalid user data");
+    throw new Error(`Please add all fields\n`);
   }
 
-  const filter = { email: "mrj26@buffalo.edu" };
-  const update = { password: 'matt' };
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
-  res.status(201).json({
-    password: user.password,
-  });
+  const filter = { token: token };
+  const update = { password: hashedPassword };
 
-  const resetpassworduser = await User.findByIdAndUpdate(filter, update);
+  const tokenExists = await User.findOneAndUpdate(filter, update);
 
-  res.status(201).json({
-    password: user.password,
-  });
+  if(!tokenExists){
+    throw new Error(`Invalid Code\n`);
+  }
+  else{
+    res.json({
+      token: token
+    })
+  }
+  
 });
 
 
@@ -174,8 +181,7 @@ module.exports = {
 };
 
 const nodemailer = require('nodemailer');
-const { application } = require("express");
-const { db } = require("../models/userModel");
+
 let transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {

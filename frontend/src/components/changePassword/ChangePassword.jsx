@@ -19,13 +19,13 @@ function ChangePasswordForm() {
             </div>
             <div className="txtfields">
                 <label className="email">
-                    <input type="text" placeholder='Code' id='email' name='email' className='emailfield'/>
+                    <input type="text" placeholder='Code' id='token' name='token' className='emailfield'/>
                 </label><br></br>
                 <label className="password">
                     <input type={passwordShown ? "text" : "password"} placeholder='New password' id='password' name='password' />
                 </label><br></br>
                 <label className="confirmpassword">
-                    <input type={passwordShown ? "text" : "password"} placeholder='Confirm new password' id='confirmpassword' name='confirmpassword' />
+                    <input type={passwordShown ? "text" : "password"} placeholder='Confirm new password' id='confirmPassword' name='confirmPassword' />
                 </label>
                 <div className='userregister'>
                     <img src={User} />
@@ -38,11 +38,9 @@ function ChangePasswordForm() {
                 </div>
             </div>
             <div className='loginbutton'>
-
                 <button>
                     <img src={LoginButton} />
                 </button>
-
             </div>
             <div className='redirectback'>
                 <Link to="/login">
