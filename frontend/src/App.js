@@ -4,7 +4,7 @@ import Login from './components/login/Login'
 import Register from './components/register/Register'
 import ForgetPassword from './components/forgetPassword/ForgetPassword'
 import ChangePassword from './components/changePassword/ChangePassword'
-
+import Folder from './components/folder/Folder'
 
 const NotFound = () => {
 
@@ -25,6 +25,7 @@ function App() {
           <Route path="/register" element={<Register></Register>} />
           <Route path="/forgot" element={<ForgetPassword></ForgetPassword>} />
           <Route path="/reset" element={<ChangePassword></ChangePassword>} />
+          <Route path="/folder" element={<Folder></Folder>} />
         </Routes>
     </div>
   );

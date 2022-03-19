@@ -8,21 +8,56 @@ import GoogleButton from './Google.png'
 import AppleButton from './AppleID.png'
 import FacebookButton from './Facebook.png'
 import { Link, use } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function LoginForm() {
 
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("")
+    const navigate = useNavigate();
+
+    const handleSubmit = (event) => {
+        // Prevents automatically refreshing page
+        event.preventDefault()
+
+        // Sending form data to MongoDB 
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, password: password })
+        };
+
+        fetch("http://localhost:5000/login", requestOptions)
+        .then( (response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Something went wrong');
+        })
+        .then( (data) => {
+            // Go to another page in React
+            if (data.success) {
+                navigate('/folder')
+            }
+            else {
+                alert('you are not a user :/')
+            }
+        })
+        .catch( (error) => console.log(error))
+    }
+
     return (
         <div>
-            <form action="http://localhost:5000/login" method="POST">
+            <form onSubmit={handleSubmit}>
                 <div className='signin'>
                     <label>Sign In</label>
                 </div>
                 <div className="txtfields">
                     <label className="email">
-                        <input name="email" type="text" placeholder='Username or Email Address' id='email' className='emailfield'/>
+                        <input name="email" type="text" placeholder='Username or Email Address' id='email' className='emailfield' value={email} onChange={ (event) => setEmail(event.target.value) }/>
                     </label><br></br>
                     <label className="password">
-                        <input name="password" type="password" placeholder='Password' id='password' />
+                        <input name="password" type="password" placeholder='Password' id='password' value={password} onChange={ (event) => setPassword(event.target.value) } />
                     </label>
                     <div className='user'>
                         <img src={User} />
@@ -32,9 +67,7 @@ function LoginForm() {
                     </div>
                 </div>
                 <div className='loginbutton'>
-                    <button >
-                        <img src={LoginButton} />
-                    </button>
+                    <input type="submit" value="Submit"/>
                 </div>
                 <div className='redirect'>
                     <Link to="/register">
