@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
-const forgotUser = require("../models/userModel");
 
 // @desc    Get login page
 // @route   GET /login
@@ -155,21 +154,7 @@ const resetUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid user data");
   }
-
-  // const filter = { email: "mrj26@buffalo.edu" };
-  // const update = { password: 'matt' };
-
-  // res.status(201).json({
-  //   password: user.password,
-  // });
-
-  // const resetpassworduser = await User.findByIdAndUpdate(filter, update);
-
-  // res.status(201).json({
-  //   password: user.password,
-  // });
 });
-
 
 module.exports = {
   loginPage,
