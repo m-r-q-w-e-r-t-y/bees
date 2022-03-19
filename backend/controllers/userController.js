@@ -64,11 +64,12 @@ const registerUser = asyncHandler(async (req, res) => {
     token: token,
   });
   if (user) {
-    res.status(201).json({
-      _id: user.id,
-      name: user.name,
-      email: user.email,
-    });
+    res.status(200);
+    // res.status(201).json({
+    //   _id: user.id,
+    //   name: user.name,
+    //   email: user.email,
+    // });
   } else {
     res.status(400);
     throw new Error("Invalid user data");
@@ -84,17 +85,16 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await bcrypt.compare(password, user.password))) {
-    res.json({
-      _id: user.id,
-      name: user.name,
-      email: user.email,
-    });
+    // res.json({
+    //   _id: user.id,
+    //   name: user.name,
+    //   email: user.email,
+    // });
+    res.status(200).json({success: true})
   } else {
-    res.status(400);
+    res.status(200).json({success: false})
     throw new Error("Invalid credentials");
   }
-  //   res.json({ message: "Login User" });
-
 });
 
 // @desc    Send email token for reset password
@@ -107,26 +107,33 @@ const forgottenUser = asyncHandler(async (req, res) => {
     throw new Error(`Please add all fields\n${email}`);
   }
 
+  // Obtain user by email
+  const user = await User.findOne({ email });
 
-  res.json({
-    email: email,
-  });
-  const Str = require('@supercharge/strings')
-  const token = Str.random(50)
-  let mailOptions = {
-    from: "noreply1bees@gmail.com",
-    to: email,
-    subject: "Reset Token",
-    html: "token code:" + token
-  }
-  transporter.sendMail(mailOptions, function (err, info) {
-    if (err) {
-      console.log(err)
-    } else {
-      console.log(info);
+  if (user){
+    const str = require('@supercharge/strings')
+    const token = str.random(50)
+    let mailOptions = {
+      from: "noreply1bees@gmail.com",
+      to: email,
+      subject: "Reset Token",
+      html: "token code:" + token
     }
-  })
-  
+    transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log(info);
+      }
+    })
+    
+    res.json({
+      email: email,
+    });
+  }
+  res.json({
+    user_exists: false,
+  });
 })
 
 // @desc    Change password
@@ -135,29 +142,32 @@ const forgottenUser = asyncHandler(async (req, res) => {
 const resetUser = asyncHandler(async (req, res) => {
   const { token, password, confirmNewPassword } = req.body;
   const user = await forgotUser.find({ token })
-
   if (user) {
-    res.json({
-      password: password,
-    });
+    const id = user.id;
+    const str = require('@supercharge/strings');
+    const updatedToken = str.random(50);
+    const updatedUserToken = await User.findByIdAndUpdate(id, { 
+      token : updatedToken,
+      password: password
+    })
   }
   else {
     res.status(400);
     throw new Error("Invalid user data");
   }
 
-  const filter = { email: "mrj26@buffalo.edu" };
-  const update = { password: 'matt' };
+  // const filter = { email: "mrj26@buffalo.edu" };
+  // const update = { password: 'matt' };
 
-  res.status(201).json({
-    password: user.password,
-  });
+  // res.status(201).json({
+  //   password: user.password,
+  // });
 
-  const resetpassworduser = await User.findByIdAndUpdate(filter, update);
+  // const resetpassworduser = await User.findByIdAndUpdate(filter, update);
 
-  res.status(201).json({
-    password: user.password,
-  });
+  // res.status(201).json({
+  //   password: user.password,
+  // });
 });
 
 
@@ -173,28 +183,28 @@ module.exports = {
   resetPage
 };
 
-const nodemailer = require('nodemailer');
-const { application } = require("express");
-const { db } = require("../models/userModel");
-let transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: "noreply1bees@gmail.com",
-    pass: "AnyPass1!"
-  }
-})
+// const nodemailer = require('nodemailer');
+// const { application } = require("express");
+// const { db } = require("../models/userModel");
+// let transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     user: "noreply1bees@gmail.com",
+//     pass: "AnyPass1!"
+//   }
+// })
 
-let mailOptions = {
-  from: "noreply1bees@gmail.com",
-  to: "noreply1bees@gmail.com",
-  subject: "Reset Token",
-  html: "token sent"
-}
+// let mailOptions = {
+//   from: "noreply1bees@gmail.com",
+//   to: "noreply1bees@gmail.com",
+//   subject: "Reset Token",
+//   html: "token sent"
+// }
 
-transporter.sendMail(mailOptions, function (err, info) {
-  if (err) {
-    console.log(err)
-  } else {
-    console.log(info);
-  }
-})
+// transporter.sendMail(mailOptions, function (err, info) {
+//   if (err) {
+//     console.log(err)
+//   } else {
+//     console.log(info);
+//   }
+// })
