@@ -6,9 +6,11 @@ const colors = require('colors')
 const connectMongo = require('./config/db');
 const { connect } = require('./routes/testroutes');
 
+
 connectMongo()
 
 const app = express();
+app.use(cors());
 
 app.use(cors())
 app.use(express.json())

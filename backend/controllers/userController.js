@@ -46,6 +46,14 @@ const registerUser = asyncHandler(async (req, res) => {
   const userExists = await User.findOne({ email });
   if (userExists) {
     throw new Error("User already exists")
+    res.json({
+      success: false
+    })
+  }
+  else{
+    res.json({
+      success: true
+    })
   }
   //Hash password
   const salt = await bcrypt.genSalt(10);
@@ -106,12 +114,16 @@ const forgottenUser = asyncHandler(async (req, res) => {
     throw new Error(`Please add all fields\n${email}`);
   }
 
-  // Obtain user by email
-  const user = await User.findOne({ email });
 
-  if (user){
-    const str = require('@supercharge/strings')
-    const token = str.random(50)
+  const Str = require('@supercharge/strings')
+  const token = Str.random(50)
+  const filter = { email: email };
+  const update = { token: token };
+
+  const userExists = await User.findOneAndUpdate( filter, update);
+
+  if(userExists){
+
     let mailOptions = {
       from: "noreply1bees@gmail.com",
       to: email,
@@ -124,36 +136,53 @@ const forgottenUser = asyncHandler(async (req, res) => {
       } else {
         console.log(info);
       }
+
+      res.json({
+        success: true
+      })
     })
-    
-    res.json({
-      email: email,
-    });
   }
-  res.json({
-    user_exists: false,
-  });
+  else {
+    res.json({
+      success: false
+    })
+  }
+  
+
 })
 
 // @desc    Change password
 // @route   POST /reset
 // @access  Public
 const resetUser = asyncHandler(async (req, res) => {
-  const { token, password, confirmNewPassword } = req.body;
-  const user = await forgotUser.find({ token })
-  if (user) {
-    const id = user.id;
-    const str = require('@supercharge/strings');
-    const updatedToken = str.random(50);
-    const updatedUserToken = await User.findByIdAndUpdate(id, { 
-      token : updatedToken,
-      password: password
+
+  const { token, password, confirmPassword } = req.body;
+
+    if (!token || !password || !confirmPassword) {
+
+    res.status(400);
+    throw new Error(`Please add all fields\n`);
+  }
+
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  const filter = { token: token };
+  const update = { password: hashedPassword };
+
+  const tokenExists = await User.findOneAndUpdate(filter, update);
+
+  if(!tokenExists){
+    throw new Error(`Invalid Code\n`);
+  }
+  else{
+    res.json({
+      success: true
     })
   }
-  else {
-    res.status(400);
-    throw new Error("Invalid user data");
-  }
+  
+
 });
 
 module.exports = {
@@ -168,28 +197,29 @@ module.exports = {
   resetPage
 };
 
-// const nodemailer = require('nodemailer');
-// const { application } = require("express");
-// const { db } = require("../models/userModel");
-// let transporter = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//     user: "noreply1bees@gmail.com",
-//     pass: "AnyPass1!"
-//   }
-// })
 
-// let mailOptions = {
-//   from: "noreply1bees@gmail.com",
-//   to: "noreply1bees@gmail.com",
-//   subject: "Reset Token",
-//   html: "token sent"
-// }
+const nodemailer = require('nodemailer');
 
-// transporter.sendMail(mailOptions, function (err, info) {
-//   if (err) {
-//     console.log(err)
-//   } else {
-//     console.log(info);
-//   }
-// })
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: "noreply1bees@gmail.com",
+    pass: "AnyPass1!"
+  }
+})
+
+let mailOptions = {
+  from: "noreply1bees@gmail.com",
+  to: "noreply1bees@gmail.com",
+  subject: "Reset Token",
+  html: "token sent"
+}
+
+transporter.sendMail(mailOptions, function (err, info) {
+  if (err) {
+    console.log(err)
+  } else {
+    console.log(info);
+  }
+})
+

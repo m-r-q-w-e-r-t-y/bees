@@ -17,6 +17,10 @@ const userSchema = mongoose.Schema({
     token: {
         type: String,
         require: [false, ''],
+    },
+    confirmPassword: {
+        type: String,
+        require: [false, ''],
     }
 =======
 >>>>>>> develop

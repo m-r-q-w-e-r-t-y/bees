@@ -4,28 +4,64 @@ import User from './User.png'
 import Lock from './lock.png'
 import LoginButton from './LoginButton.png'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function ChangePasswordForm() {
 
+    const [token, setToken] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const navigate = useNavigate();
     const [passwordShown, setPasswordShown] = useState(false);
     const togglePassword = () => {
         setPasswordShown(!passwordShown);
     }
 
+    const handleSubmit = (event) =>  {
+        // Prevents automatically refreshing page
+        event.preventDefault()
+
+        // Sending form data to MongoDB 
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: token, password: password, confirmPassword: confirmPassword })
+        };
+
+        fetch("http://localhost:5000/reset", requestOptions)
+        .then( (response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Something went wrong');
+        })
+        .then( (data) => {
+            // Go to another page in React
+            if (data.success) {
+                navigate('/login')
+            }
+            else {
+                alert('you are not a user :/')
+            }
+        })
+        .catch( (error) => console.log(error))
+        
+    }
+
     return (
-        <form action="http://localhost:5000/reset" method="POST">
+        <form onSubmit={handleSubmit}>
             <div className='changepassword'>
                 <label>Change Password</label>
             </div>
             <div className="txtfields">
                 <label className="email">
-                    <input type="text" placeholder='Code' id='email' name='email' className='emailfield'/>
+                    <input type="text" placeholder='Code' id='token' name='token' className='emailfield' onChange={(event) => setToken(event.target.value)}/>
                 </label><br></br>
                 <label className="password">
-                    <input type={passwordShown ? "text" : "password"} placeholder='New password' id='password' name='password' />
+                    <input type={passwordShown ? "text" : "password"} placeholder='New password' id='password' name='password' onChange={(event) => setPassword(event.target.value)}/>
                 </label><br></br>
                 <label className="confirmpassword">
-                    <input type={passwordShown ? "text" : "password"} placeholder='Confirm new password' id='confirmpassword' name='confirmpassword' />
+                    <input type={passwordShown ? "text" : "password"} placeholder='Confirm new password' id='confirmPassword' name='confirmPassword' onChange={(event) => setConfirmPassword(event.target.value)}/>
                 </label>
                 <div className='userregister'>
                     <img src={User} />
@@ -38,11 +74,9 @@ function ChangePasswordForm() {
                 </div>
             </div>
             <div className='loginbutton'>
-
                 <button>
                     <img src={LoginButton} />
                 </button>
-
             </div>
             <div className='redirectback'>
                 <Link to="/login">
