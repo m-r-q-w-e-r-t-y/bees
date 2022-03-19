@@ -38,7 +38,7 @@ function RegisterForm() {
                 navigate('/login')
             }
             else {
-                alert('invalid :/')
+                alert('Email already in use')
             }
         })
         .catch( (error) => console.log(error))
