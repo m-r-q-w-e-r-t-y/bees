@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
-const forgotUser = require("../models/userModel");
 
 // @desc    Get login page
 // @route   GET /login
@@ -72,11 +71,12 @@ const registerUser = asyncHandler(async (req, res) => {
     token: token,
   });
   if (user) {
-    res.status(201).json({
-      _id: user.id,
-      name: user.name,
-      email: user.email,
-    });
+    res.status(200);
+    // res.status(201).json({
+    //   _id: user.id,
+    //   name: user.name,
+    //   email: user.email,
+    // });
   } else {
     res.status(400);
     throw new Error("Invalid user data");
@@ -92,17 +92,16 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await bcrypt.compare(password, user.password))) {
-    res.json({
-      _id: user.id,
-      name: user.name,
-      email: user.email,
-    });
+    // res.json({
+    //   _id: user.id,
+    //   name: user.name,
+    //   email: user.email,
+    // });
+    res.status(200).json({success: true})
   } else {
-    res.status(400);
+    res.status(200).json({success: false})
     throw new Error("Invalid credentials");
   }
-  //   res.json({ message: "Login User" });
-
 });
 
 // @desc    Send email token for reset password
@@ -115,6 +114,7 @@ const forgottenUser = asyncHandler(async (req, res) => {
     throw new Error(`Please add all fields\n${email}`);
   }
 
+
   const Str = require('@supercharge/strings')
   const token = Str.random(50)
   const filter = { email: email };
@@ -123,6 +123,7 @@ const forgottenUser = asyncHandler(async (req, res) => {
   const userExists = await User.findOneAndUpdate( filter, update);
 
   if(userExists){
+
     let mailOptions = {
       from: "noreply1bees@gmail.com",
       to: email,
@@ -135,6 +136,7 @@ const forgottenUser = asyncHandler(async (req, res) => {
       } else {
         console.log(info);
       }
+
       res.json({
         success: true
       })
@@ -146,18 +148,22 @@ const forgottenUser = asyncHandler(async (req, res) => {
     })
   }
   
+
 })
 
 // @desc    Change password
 // @route   POST /reset
 // @access  Public
 const resetUser = asyncHandler(async (req, res) => {
+
   const { token, password, confirmPassword } = req.body;
 
     if (!token || !password || !confirmPassword) {
+
     res.status(400);
     throw new Error(`Please add all fields\n`);
   }
+
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
@@ -176,8 +182,8 @@ const resetUser = asyncHandler(async (req, res) => {
     })
   }
   
-});
 
+});
 
 module.exports = {
   loginPage,
@@ -190,6 +196,7 @@ module.exports = {
   resetUser,
   resetPage
 };
+
 
 const nodemailer = require('nodemailer');
 
@@ -215,3 +222,4 @@ transporter.sendMail(mailOptions, function (err, info) {
     console.log(info);
   }
 })
+

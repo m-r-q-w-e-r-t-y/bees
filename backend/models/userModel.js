@@ -13,6 +13,7 @@ const userSchema = mongoose.Schema({
         type: String,
         required: [true, 'Please add a password'],
     }, 
+<<<<<<< HEAD
     token: {
         type: String,
         require: [false, ''],
@@ -21,10 +22,13 @@ const userSchema = mongoose.Schema({
         type: String,
         require: [false, ''],
     }
+=======
+>>>>>>> develop
 }, {
     timestamps: true,
 });
 
+<<<<<<< HEAD
 
 
 module.exports = mongoose.model('User', userSchema)
@@ -43,3 +47,6 @@ module.exports = mongoose.model('User', userSchema)
 // });
 
 // module.exports = mongoose.model('forgotUser', forgotSchema)
+=======
+module.exports = mongoose.model('User', userSchema)
+>>>>>>> develop

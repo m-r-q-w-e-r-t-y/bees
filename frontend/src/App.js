@@ -4,28 +4,21 @@ import Login from './components/login/Login'
 import Register from './components/register/Register'
 import ForgetPassword from './components/forgetPassword/ForgetPassword'
 import ChangePassword from './components/changePassword/ChangePassword'
-
-
-const NotFound = () => {
-
-  return(
-    <React.Fragment>
-        <h1 style={{fontSize: '10rem', color:'blue'}}>Not Found</h1>
-    </React.Fragment>
-  )
-}
+import Folder from './components/folder/Folder'
+import NavBar from "./components/navBar/NavBar";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-      </header>
-        <Routes>
-          <Route path="*" element={<Login></Login>} />
-          <Route path="/register" element={<Register></Register>} />
-          <Route path="/forgot" element={<ForgetPassword></ForgetPassword>} />
+      <header className="App-header"></header>
+      <NavBar />
+      <Routes>
+        <Route path="*" element={<Login></Login>} />
+        <Route path="/register" element={<Register></Register>} />
+        <Route path="/forgot" element={<ForgetPassword></ForgetPassword>} />
           <Route path="/reset" element={<ChangePassword></ChangePassword>} />
-        </Routes>
+          <Route path="/folder" element={<Folder></Folder>} />
+      </Routes>
     </div>
   );
 }
