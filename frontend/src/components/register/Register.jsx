@@ -9,23 +9,56 @@ import FacebookButton from './Facebook.png'
 import { Link, useNavigate } from 'react-router-dom'
 
 function RegisterForm() {
-    const navigate = useNavigate()
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [name, setName] = useState("");
+    const navigate = useNavigate();
+
+    const handleSubmit = (event) =>  {
+        // Prevents automatically refreshing page
+        event.preventDefault()
+
+        // Sending form data to MongoDB 
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email , password: password, name: name})
+        };
+
+        fetch("http://localhost:5000/register", requestOptions)
+        .then( (response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Something went wrong');
+        })
+        .then( (data) => {
+            // Go to another page in React
+            if (data.success) {
+                navigate('/login')
+            }
+            else {
+                alert('invalid :/')
+            }
+        })
+        .catch( (error) => console.log(error))
+    }
 
     return (
         <div>
-            <form action="http://localhost:5000/register" method="POST">
+            <form onSubmit={handleSubmit}>
                 <div className='signup'>
                     <label>Sign Up</label>
                 </div>
                 <div className="txtfields">
                     <label className="email">
-                        <input type="email" placeholder='Username or Email Address' id='email' name='email' className='emailfield' />
+                        <input type="email" placeholder='Username or Email Address' id='email' name='email' className='emailfield' value={email} onChange={(event) => setEmail(event.target.value)}/>
                     </label><br></br>
                     <label className="password">
-                        <input type="password" placeholder='Password' id='password' name='password' />
+                        <input type="password" placeholder='Password' id='password' name='password' value={password} onChange={(event) => setPassword(event.target.value)}/>
                     </label><br></br>
                     <label className="confirmpassword">
-                        <input type="password" placeholder='Confirm password' id='confirmpassword' name='name' />
+                        <input type="password" placeholder='Confirm password' id='confirmpassword' name='name' value={name} onChange={(event) => setName(event.target.value)}/>
                     </label>
                     <div className='userregister'>
                         <img src={User} />

@@ -47,6 +47,14 @@ const registerUser = asyncHandler(async (req, res) => {
   const userExists = await User.findOne({ email });
   if (userExists) {
     throw new Error("User already exists")
+    res.json({
+      success: false
+    })
+  }
+  else{
+    res.json({
+      success: true
+    })
   }
   //Hash password
   const salt = await bcrypt.genSalt(10);
@@ -115,9 +123,6 @@ const forgottenUser = asyncHandler(async (req, res) => {
   const userExists = await User.findOneAndUpdate( filter, update);
 
   if(userExists){
-    res.json({
-      email: userExists
-    })
     let mailOptions = {
       from: "noreply1bees@gmail.com",
       to: email,
@@ -130,10 +135,16 @@ const forgottenUser = asyncHandler(async (req, res) => {
       } else {
         console.log(info);
       }
+      res.json({
+        success: true
+      })
     })
   }
-
-
+  else {
+    res.json({
+      success: false
+    })
+  }
   
 })
 
@@ -161,7 +172,7 @@ const resetUser = asyncHandler(async (req, res) => {
   }
   else{
     res.json({
-      token: token
+      success: true
     })
   }
   
