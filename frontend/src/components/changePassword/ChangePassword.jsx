@@ -28,7 +28,7 @@ function ChangePasswordForm() {
             body: JSON.stringify({ token: token, password: password, confirmPassword: confirmPassword })
         };
 
-        fetch("http://localhost:5000/reset", requestOptions)
+        fetch(process.env.REACT_APP_API + "/reset", requestOptions)
         .then( (response) => {
             if (response.ok) {
                 return response.json();

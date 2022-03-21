@@ -25,7 +25,7 @@ function ForgetPasswordForm() {
             body: JSON.stringify({ email: email })
         };
 
-        fetch("http://localhost:5000/forgot", requestOptions)
+        fetch(process.env.REACT_APP_API + "/forgot", requestOptions)
         .then( (response) => {
             if (response.ok) {
                 return response.json();

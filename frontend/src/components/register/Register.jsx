@@ -25,7 +25,7 @@ function RegisterForm() {
             body: JSON.stringify({ email: email , password: password, name: name})
         };
 
-        fetch("http://localhost:5000/register", requestOptions)
+        fetch(process.env.REACT_APP_API + "/register", requestOptions)
         .then( (response) => {
             if (response.ok) {
                 return response.json();

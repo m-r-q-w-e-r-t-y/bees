@@ -27,7 +27,7 @@ function LoginForm() {
             body: JSON.stringify({ email: email, password: password })
         };
 
-        fetch("http://localhost:5000/login", requestOptions)
+        fetch(process.env.REACT_APP_API + "/login", requestOptions)
         .then( (response) => {
             if (response.ok) {
                 return response.json();
