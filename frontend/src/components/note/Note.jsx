@@ -343,7 +343,7 @@ const Note = () => {
             { commentsList }
           </div>
           <div className="code">
-            {/* { commentHover ? <button id="comment" style={{ position: 'absolute', display: 'inline-block', left: commentButtonPoint.x, top: commentButtonPoint.y}} onClick={addComment}>Click</button> : <></>} */}
+            { commentHover ? <button id="comment" style={{ position: 'absolute', display: 'inline-block', left: commentButtonPoint.x, top: commentButtonPoint.y}} onClick={addComment}>Click</button> : <></>}
             <CodeMirror
               value={code}
               height="auto"
