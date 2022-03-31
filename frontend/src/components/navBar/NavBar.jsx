@@ -17,13 +17,13 @@ export default class NavBar extends Component {
               type="text"
               placeholder=" Search for projects, teammates..."
             />
-            <button class="fa fa-search"></button>
+            <button className="fa fa-search"></button>
           </div>
         </div>
         <div className="rightSide">
-          <div class="dropdown">
+          <div className="dropdown">
             <button className="dropbtn">≡</button>
-            <div class="dropdown-content">
+            <div className="dropdown-content">
               <a href="#">Setting</a>
               <a href="#">Log out</a>
             </div>

@@ -1,0 +1,68 @@
+.row {
+    display: flex;
+}
+
+.code {
+  position: relative;
+  width: 55%;
+  height: 100vh;
+}
+
+.comments {
+  position: relative;
+  width: 45%;
+}
+
+
+
+
+
+.viewButton {
+  position: fixed;
+  z-index: 1000;
+  left:94vw;
+  bottom: 5vh;
+  width: 45px;
+  height: 45px;
+  background: gray;
+  border-radius: 45px;
+  transition: 0.2s ease-in-out;           /* Makes any future tranform features smooth */
+}
+
+.viewButton:hover {
+  transform: rotate(45deg);
+  background: red;
+}
+
+.viewButtonLine1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22.5px;
+  height: 4.8px;
+  border-radius: 2px;
+  background: white;
+  transform-origin: center;
+  transform: translate(-50%, -50%) rotate(45deg);         /* Only difference between the other line. This is this: '\' */
+}
+
+.viewButtonLine2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22.5px;
+  height: 4.5px;
+  border-radius: 2px;
+  background: white;
+  transform-origin: center;
+  transform: translate(-50%, -50%) rotate(-45deg);        /* Only difference between the other line. This is this: '/' */
+}
+
+.original {
+  opacity: 0;
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.fadeIn {
+  opacity: 1;
+}
