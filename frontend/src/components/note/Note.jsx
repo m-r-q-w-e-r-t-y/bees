@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 // import 'prismjs/components/prism-clike';
 // import 'prismjs/components/prism-javascript';
 import CodeMirror from '@uiw/react-codemirror';
-// import Comment from '../comment/Comment.jsx'
+import Comment from '../comment/Comment.jsx'
 import "./note.css"
 
 const Note = () => {  
@@ -285,13 +285,13 @@ const Note = () => {
 
 
   const addComment = () => {
-    // setCommentsList(commentsList.concat(
-    //   // This is a hack :/
-    //   <div className='commentsArray' key={commentsList.length} id={commentsList.length} style={{position: 'absolute', top: commentButtonPoint.y, left: '50%', transform: 'translate(-50%)'}}>
-    //     <Comment/>
-    //   </div>
-    // ));
-    // setCommentHover(false);
+    setCommentsList(commentsList.concat(
+      // This is a hack :/
+      <div className='commentsArray' key={commentsList.length} id={commentsList.length} style={{position: 'absolute', top: commentButtonPoint.y, left: '50%', transform: 'translate(-50%)'}}>
+        <Comment/>
+      </div>
+    ));
+    setCommentHover(false);
   }
 
 
