@@ -62,8 +62,8 @@ class NameNewDocument extends Component  {
                 <form className = "newDocumentForm" action="" >
                     <input className = "newDocumentInput" type="text" placeholder="Document Name ... "/>
                     <div className="newDocumentButtons"> 
-                        <button className="newDocumentCancel">Cancel</button> 
-                        <button className="newDocumentCreate">Create</button>
+                        <div className="newDocumentCancel">Cancel</div> 
+                        <div className="newDocumentCreate">Create</div>
                     </div>
                 </form>
             </div>
