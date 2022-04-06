@@ -4,6 +4,12 @@ import { useState, useEffect, useCallback } from 'react'
 // import 'prismjs/components/prism-javascript';
 import CodeMirror from '@uiw/react-codemirror';
 import Comment from '../comment/Comment.jsx'
+import { python } from '@codemirror/legacy-modes/mode/python';   // npm i @codemirror/legacy-modes
+import { swift } from '@codemirror/legacy-modes/mode/swift';   // npm i @codemirror/legacy-modes
+import { javascript } from '@codemirror/legacy-modes/mode/javascript';   // npm i @codemirror/legacy-modes
+import { go } from '@codemirror/legacy-modes/mode/go';   // npm i @codemirror/legacy-modes
+import { c } from '@codemirror/legacy-modes/mode/clike';   // npm i @codemirror/legacy-modes
+import { StreamLanguage } from '@codemirror/stream-parser';    // npm i @codemirror/stream-parser
 import "./note.css"
 
 const Note = () => {  
@@ -13,6 +19,7 @@ const Note = () => {
   const [commentHover, setCommentHover] = useState(false);                            // Shows Comment button on true. Removes in false
   const [commentsList, setCommentsList] = useState([]);                               // Comment list that shows on the left
   const [visibleComments, setVisibleComments] = useState(true);                       // Hides or unhides the comments for viewing
+  const [language, setLanguage] = useState(javascript)                                // Used for syntax highlighting
   
   // Code that is shown on the CodeMirror editor. Can use MongoDB to make dynamic
   const code = `//
@@ -211,6 +218,15 @@ const Note = () => {
       }
   }`;
 
+
+  const lang = {
+    "py": python,
+    "swift": swift,
+    "js": javascript,
+    "go": go,
+    "c": c
+  }
+
   // Handles what to do when the an HTML element comes into view (https://codepen.io/ryanfinni/pen/VwZeGxN) (https://codepen.io/ryanfinni/pen/jONBEdX)
   const handleIntersection = (entries) => {
     for (const entry of entries) {
@@ -320,6 +336,10 @@ const Note = () => {
   }
 
 
+  const handleSelectLanguage = (event) => {
+    setLanguage(lang[event.target.value])
+  }
+
 
 
 
@@ -343,17 +363,28 @@ const Note = () => {
             { commentsList }
           </div>
           <div className="code">
-            { commentHover ? <button id="comment" style={{ position: 'absolute', display: 'inline-block', left: commentButtonPoint.x, top: commentButtonPoint.y}} onClick={addComment}>Click</button> : <></>}
-            <CodeMirror
-              value={code}
-              height="auto"
-              // height="100vh"
-              width="55vw"
-              // extensions={[javascript({ jsx: true })]}
-              onChange={(value, viewUpdate) => {
-                console.log('value:', value);
-              }}
-            />
+            <div className="codeEditor">
+              <div className='selectLanguage'>
+                <select name="" id="" onChange={handleSelectLanguage}>
+                  <option value="py">Python</option>
+                  <option value="swift">Swift</option>
+                  <option value="js">Javascript</option>
+                  <option value="go">Go</option>
+                  <option value="c">C</option>
+                </select>
+              </div>
+              { commentHover ? <button id="comment" style={{ position: 'absolute', display: 'inline-block', left: commentButtonPoint.x, top: commentButtonPoint.y}} onClick={addComment}>Click</button> : <></>}
+              <CodeMirror
+                value={code}
+                height="auto"
+                // height="100vh"
+                width="55vw"
+                extensions={StreamLanguage.define(language) } 
+                onChange={(value, viewUpdate) => {
+                  console.log('value:', value);
+                }}
+              />
+            </div>
             
           </div>
         </div>
