@@ -1,11 +1,10 @@
-html{
-    background-color: white;
-}
+
 
 .folder{
     display: flex;
     background-color: white;
     z-index: 1;
+    height: 100vh;
 }
 
 .document{
