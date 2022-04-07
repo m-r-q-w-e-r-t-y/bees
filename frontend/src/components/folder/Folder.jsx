@@ -1,98 +1,73 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Component } from "react";
 import "./folder.css"
-class Menu extends Component {
-    render() { 
-        return (
-            <ul className="menuList">
-                <li className="menuItem">Rename</li>
-                <li className="menuItem">Open</li>
-                <li className="menuItem">Remove</li>
-                <li className="menuItem">Share</li>
-            </ul>
-        );
-    }
-}
-class CreateDocumentCircle extends Component {
-    render(){
-        return(
-            <div className = "createDocumentCircleContainer">
-                <span className = "createDocumentCirclePlus">+</span>
-            </div>
-        );
-    }
-}
-class Document extends Component {
+import CreateDocumentCircle from "./createDocumentCircle";
+import CreateDocument from "./createDocument";
+import Document from "./document";
+import Menu from "./menu.jsx"
+import NameNewDocument from "./nameNewDocument";
+
+class Folder extends Component {
+
     constructor(props) {
-        super(props)
-        this.state = {
-            name: "Initial State"
+        super(props);
+        this.createDocumentHandler = this.createDocumentHandler.bind(this);
+        this.cancelNaming = this.cancelNaming.bind(this);
+        this.addDocument = this.addDocument.bind(this);
+    }
+    state = {  
+        documents: [],
+        renaming: "false"
+    };
+
+    prependDocument(name){
+        this.setState(this.state.documents.unshift({name})) // this is going into this.state -> documents -> {prepending a document}. 
+    }
+   
+    
+    createDocumentHandler(){
+        this.setState({
+            renaming:"true"
+        })
+    }
+    cancelNaming(){
+        this.setState({
+            renaming:"false"
+        })
+    }
+
+    addDocument(documentName){
+        this.setState({
+            documents: this.state.documents.concat([documentName])
+        })
+    }
+    renderDocuments(){
+        if(this.state.documents.length === 0){
+            return(
+                <CreateDocument handler={this.createDocumentHandler}> </CreateDocument>
+            )
+        }
+        else{
+            return(
+                <>
+                    
+                    {this.state.documents.map(document => (<Document name={document}> </Document>) )}
+                    <CreateDocumentCircle handler = {this.createDocumentHandler}></CreateDocumentCircle>
+                </>
+            )
+        }
+
+    }
+    renderNaming(){
+        if(this.state.renaming === "true"){
+            return <NameNewDocument cancelHandler = {this.cancelNaming} addDocumentHandler = {this.addDocument}></NameNewDocument>
         }
     }
     render() { 
         return (
-            <div className = "document">
-                <div className = "documentCard" >  
-                    <img src={require("./file.png")} className = "documentImage" alt="document image"  />
-                    <img  src={require("./hamburger.png")} className = "documentHamburger" onClick = {() => alert('hello')} alt="" />
-                </div>
-                <h1 className="documentName"> {this.props.name} </h1>
-            </div>
-        );
-    }
-}
-
-class CreateDocument extends Component {
-    handleClick(){
-    }
-    render() { 
-        return (
-            <div className='createDocumentCard' onClick = {this.handleClick}>
-                <img className = "createDocumentImage" src={require("./newFile.png")}  alt="" />
-            </div>
-            
-        );
-    }
-}
-
-class NameNewDocument extends Component  {
-    render(){
-        return(
-            <div className= "newDocumentLayer">
-                <form className = "newDocumentForm" action="" >
-                    <input className = "newDocumentInput" type="text" placeholder="Document Name ... "/>
-                    <div className="newDocumentButtons"> 
-                        <div className="newDocumentCancel">Cancel</div> 
-                        <div className="newDocumentCreate">Create</div>
-                    </div>
-                </form>
-            </div>
-        );
-    }
-}
-
-class Folder extends Component {
-    constructor(props) {
-        super(props)
-    }
-    prependDocument(name){
-        this.setState(this.state.documents.unshift({name}))
-    }
-    state = {  
-        documents: [
-            {name:"CSE442"},
-            {name:"CSE116"},
-            {name: "CSE 306"}
-        ]
-    } 
-    render() { 
-        return (
             <div className = "folder" >
-                <CreateDocument></CreateDocument>
-                <NameNewDocument></NameNewDocument>
-                
-              {/* {this.state.documents.map(document => (<Document name={document.name}> </Document>) )} */}
-  
+                {this.renderDocuments()}
+                {this.renderNaming()}
             </div>
         );
     }
