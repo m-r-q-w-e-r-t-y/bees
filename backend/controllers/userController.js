@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
+const Files = require("../models/fileModel");
 
 // @desc    Get login page
 // @route   GET /login
@@ -32,6 +33,15 @@ const resetPage = (req, res) => {
   res.json({ message: "Reset Page" });
 };
 
+// @desc    Get note page
+// @route   GET /note
+// @access  Public
+const notePage = async (req, res) => {
+  const notes = await Files.find();
+
+  res.status(200).json(notes);
+
+};
 
 // @desc    Submit new user
 // @route   POST /register
@@ -69,6 +79,13 @@ const registerUser = asyncHandler(async (req, res) => {
     password: hashedPassword,
     token: token,
   });
+
+  const file = await Files.create({
+    email,
+    filename: "test",
+    code: "print(Hello World!)",
+  });
+
   if (user) {
     res.status(200);
     // res.status(201).json({
@@ -184,6 +201,29 @@ const resetUser = asyncHandler(async (req, res) => {
 
 });
 
+// @desc    Save note
+// @route   POST /note
+// @access  Public
+const noteUser = asyncHandler(async (req, res) => {
+
+  const { email, filename, code } = req.body;
+
+  const filter = { email: email };
+  const update = { code: code };
+
+  const fileExists = await Files.findOneAndUpdate(filter, update);
+
+  if(!fileExists){
+    throw new Error(`Invalid Code\n`);
+  }
+  else{
+    res.json({
+      success: true
+    })
+  }
+
+});
+
 module.exports = {
   loginPage,
   //   authenticateUser,
@@ -193,7 +233,9 @@ module.exports = {
   forgottenUser,
   forgotPage,
   resetUser,
-  resetPage
+  resetPage,
+  noteUser,
+  notePage
 };
 
 

@@ -37,6 +37,7 @@ function LoginForm() {
         .then( (data) => {
             // Go to another page in React
             if (data.success) {
+                console.log(JSON.stringify(email));
                 navigate('/folder')
             }
             else {
