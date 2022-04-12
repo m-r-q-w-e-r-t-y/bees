@@ -23,7 +23,6 @@ class Folder extends Component {
     prependDocument(name){
         this.setState(this.state.documents.unshift({name})) // this is going into this.state -> documents -> {prepending a document}. 
     }
-   
     
     createDocumentHandler(){
         this.setState({
@@ -50,7 +49,6 @@ class Folder extends Component {
         else{
             return(
                 <>
-                    
                     {this.state.documents.map(document => (<Document name={document}> </Document>) )}
                     <CreateDocumentCircle handler = {this.createDocumentHandler}></CreateDocumentCircle>
                 </>

@@ -19,8 +19,13 @@ class NameNewDocument extends Component  {
       
     //Adds document to folder page with the name entered.
       handleSubmit(event) {
-        this.props.addDocumentHandler(this.state.value);
-        event.preventDefault();
+        if(this.state.value.length > 0){
+          this.props.addDocumentHandler(this.state.value);
+          event.preventDefault(); 
+        }
+        else{
+          alert("Document Name Can't Be Empty");
+        }
       }
 
     render(){
