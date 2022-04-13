@@ -32,11 +32,7 @@ const Note = () => {
 
   //Store code in database
   const handleSave = (event) => {
-    // const title = document.getElementById("titleInput")
-    // const input = document.getElementById("input")
-    console.log(commentsList[0])
-    //console.log(title.value)
-    //console.log(input.value)
+    console.log(code)
     event.preventDefault()
     const requestOptions = {
       method: 'POST',
