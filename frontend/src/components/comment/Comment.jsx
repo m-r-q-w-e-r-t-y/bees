@@ -35,6 +35,7 @@ const Comment = () => {
     const title = document.getElementById("titleInput");
     const input = document.getElementById("input");
 
+
     // If clicking on Edit button, make the Comment component editable
     if (type === "Edit") {
       title.removeAttribute("readonly");

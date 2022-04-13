@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         required: [true, 'Please add a password'],
-    }, 
+    },
     token: {
         type: String,
         require: [false, ''],
@@ -20,7 +20,7 @@ const userSchema = mongoose.Schema({
     confirmPassword: {
         type: String,
         require: [false, ''],
-    }
+    },
 }, {
     timestamps: true,
 });

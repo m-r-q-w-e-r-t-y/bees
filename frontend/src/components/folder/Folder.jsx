@@ -8,11 +8,16 @@ const Folder = () => {
         navigate('/login')
     };
 
+    const handleNew = () => {
+        navigate('/login')
+    };
+
     return (
         <div>
             <h1>This is the folder page</h1>
             <h1>You are here because you are user</h1>
             <button onClick={handleLogout}>Logout</button>
+            <button onClick={handleNew}>Create New</button>
         </div>
     );
 }
