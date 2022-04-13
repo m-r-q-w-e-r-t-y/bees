@@ -4,7 +4,7 @@ import Login from './components/login/Login'
 import Register from './components/register/Register'
 import ForgetPassword from './components/forgetPassword/ForgetPassword'
 import ChangePassword from './components/changePassword/ChangePassword'
-import Folder from './components/folder/Folder'
+import Folder from './components/folder/folder'
 import NavBar from "./components/navBar/NavBar";
 import Note from './components/note/Note'
 import NoteViewOnly from './components/noteViewOnly/NoteViewOnly'
