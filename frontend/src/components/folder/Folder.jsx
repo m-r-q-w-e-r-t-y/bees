@@ -14,9 +14,10 @@ class Folder extends Component {
         this.createDocumentHandler = this.createDocumentHandler.bind(this);
         this.cancelNaming = this.cancelNaming.bind(this);
         this.addDocument = this.addDocument.bind(this);
+        this.renameDocument = this.renameDocument.bind(this);
     }
     state = {  
-        documents: [],
+        documents: ["gay"],
         renaming: "false"
     };
 
@@ -40,6 +41,17 @@ class Folder extends Component {
             documents: this.state.documents.concat([documentName])
         })
     }
+
+
+    renameDocument(oldName, newName){
+        if(this.state.documents.includes(oldName)){
+            let index = this.state.documents.indexOf(oldName);
+            this.state.documents[index] = newName;
+            this.setState({
+                documents: this.state.documents 
+            })
+        }
+    }
     renderDocuments(){
         if(this.state.documents.length === 0){
             return(
@@ -49,7 +61,7 @@ class Folder extends Component {
         else{
             return(
                 <>
-                    {this.state.documents.map(document => (<Document name={document}> </Document>) )}
+                    {this.state.documents.map(document => (<Document renameHandler = {this.renameDocument} name={document}> </Document>) )}
                     <CreateDocumentCircle handler = {this.createDocumentHandler}></CreateDocumentCircle>
                 </>
             )

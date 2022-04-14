@@ -32,7 +32,7 @@ class RenameDocument extends Component  {
         return(
             <div className= "newDocumentLayer">
                 <form className = "newDocumentForm" action="" >
-                    <input type="text" className = "newDocumentInput" onChange={this.handleChange} value={this.state.value} placeholder="Document Name ... "/>
+                    <input type="text" className = "newDocumentInput" onChange={this.handleChange} value={this.state.value} placeholder= {this.props.documentName}/>
                     <div className="newDocumentButtons"> 
                         <div className="newDocumentCancel" onClick={this.props.cancelHandler}>Cancel</div> 
                         <div className="newDocumentCreate" onClick = {this.handleSubmit}>Rename</div>

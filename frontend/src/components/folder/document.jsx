@@ -14,12 +14,13 @@ class Document extends Component {
         }
         this.handleMenuClick = this.handleMenuClick.bind(this)
         this.cancelNaming = this.cancelNaming.bind(this)
+        this.startNaming = this.startNaming.bind(this)
     }
     
     renderRenameForm(){
         if(this.state.renaming == true){
             return(
-                <RenameDocument cancelHandler = {this.cancelNaming}></RenameDocument>   
+                <RenameDocument documentName = {this.props.name}cancelHandler = {this.cancelNaming}></RenameDocument>   
             )
         }
     }
@@ -27,11 +28,20 @@ class Document extends Component {
     renderDropdownMenu(){
         if(this.state.showMenu === true){
             return (
-                <Menu document = {this.props.name} ></Menu>
+                <Menu 
+                    renameHandler = {this.props.renameHandler} 
+                    document = {this.props.name} 
+                    startNamingHandler = {this.startNaming}
+                ></Menu>
             )
         }
     }
 
+    startNaming(){
+        this.setState({
+            renaming:true
+        })
+    }
     cancelNaming(){
         this.setState({
             renaming:false
