@@ -49,6 +49,7 @@
 .createDocumentCircleContainer{
     text-align: center;
     position: fixed;
+    align-items: center;
     right: 40px;
     bottom: 60px;
     width: 65px;
@@ -152,9 +153,8 @@
     cursor:pointer;
 }
 .menuList{
-    position: absolute;
-    left: 155px;
-    bottom: 565px;
+    position: relative;
+    margin-left: 300px;
     opacity:100 ;
     background-color: white;
     display: flex;
@@ -171,4 +171,16 @@
 }
 .documentHamburger{
     z-index: 3;
+    transition-duration: 0.35s;
+}
+.documentHamburger:hover{
+    transform: rotatez(180deg);
+}
+.menuItem{
+    transition-duration: 0.3s;
+}
+.menuItem:hover{
+    background-color:#062743;
+    color: white;
+    cursor: pointer;
 }
