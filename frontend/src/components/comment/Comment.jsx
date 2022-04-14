@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import "./comment.css";
 
-const Comment = () => {
+const Comment = ({length}) => {
   const [text, setText] = useState("");
   const [titleError, setTitleError] = useState(false);
   const [inputError, setInputError] = useState(false);
   const [type, setType] = useState("Comment");
-
+  console.log(length);
   // @desc
   // This makes the text area increase height automatically
   // https://stackoverflow.com/a/53426195/18401461
@@ -32,9 +32,9 @@ const Comment = () => {
   // @desc
   // Handles submitting a comment, editing, and setting errors for fields that are not filled
   const handleSubmit = () => {
-    const title = document.getElementById("titleInput");
-    const input = document.getElementById("input");
-
+    const title = document.getElementById("titleInput"+length);
+    const input = document.getElementById("input"+length);
+    
 
     // If clicking on Edit button, make the Comment component editable
     if (type === "Edit") {
@@ -58,6 +58,8 @@ const Comment = () => {
         setTitleError(false);
         setInputError(false);
         setType("Edit");
+        console.log(title.value);
+        console.log(input.value);
       }
     }
   };
@@ -70,6 +72,40 @@ const Comment = () => {
     // The will not delete comments but use 'filter' to remove from a database.
     // In his implementation the comments show up after a call to the database
   };
+
+    //Get code from database
+    useEffect(() => {
+      const title = document.getElementById("titleInput"+length);
+      const input = document.getElementById("input"+length);
+      title.value = "Title"+length;
+      input.value = "Input"+length;
+
+  
+      // If clicking on Edit button, make the Comment component editable
+      if (type === "Edit") {
+        title.removeAttribute("readonly");
+        input.removeAttribute("readonly");
+        setType("Comment");
+      }
+      // If clicking on Comment button, make the Comment submit
+      else {
+        if (title.value === "" || input.value === "") {
+          if (title.value === "") {
+            setTitleError(true);
+          }
+          if (input.value === "") {
+            setInputError(true);
+          }
+        } else {
+          title.setAttribute("readonly", true);
+          input.setAttribute("readonly", true);
+  
+          setTitleError(false);
+          setInputError(false);
+          setType("Edit");
+        }
+      }
+    }, []);
 
   return (
     <div className="App">
@@ -89,7 +125,7 @@ const Comment = () => {
           )}
           <div className="flexTitle">
             <textarea
-              id="titleInput"
+              id={"titleInput"+length}
               type="text"
               className="titleInput textareaInput"
               onChange={calculateHeight}
@@ -103,7 +139,7 @@ const Comment = () => {
           )}
           <div className="flexInput">
             <textarea
-              id="input"
+              id={"input"+length}
               type="text"
               className="input textareaInput"
               onChange={calculateHeight}
