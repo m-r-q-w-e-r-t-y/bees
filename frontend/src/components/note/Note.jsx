@@ -21,6 +21,9 @@ const Note = () => {
   const [commentsList, setCommentsList] = useState([]);                               // Comment list that shows on the left
   const [visibleComments, setVisibleComments] = useState(true);                       // Hides or unhides the comments for viewing
   const [codefield, setCodeField] = useState("");
+  const [savedComments, setSavedComments ] = useState([]);
+  const [commentHeight, setCommentHeight ] = useState(0);
+  const [commentAmount, setCommentAmount ] = useState();
   const [language, setLanguage] = useState(javascript)                                // Used for syntax highlighting
   const [count, setCount] = useState(0);
   // Code that is shown on the CodeMirror editor. Can use MongoDB to make dynamic
@@ -76,16 +79,25 @@ const Note = () => {
       .then(res => res.json())
       .then(
         result => {
+          if(result[0].comments.length > 0){
+            setSavedComments(result[0].comments);
+            setCommentHeight(result[0].comments[0].height);
+          }
           setCodeField(result[0].code);
+          setCount(count+1);
         },
       )
   }, []);
 
   useEffect(() => {
-    loadComment();
-    if(count < 2){
-      setCount(count+1);
-    }
+    if(savedComments !== undefined && savedComments.length !== 0){
+      console.log(savedComments);
+      loadComment(savedComments[count-1].height, savedComments);
+      console.log(savedComments[count-1].height);
+      if(count < savedComments.length){
+        setCount(count+1);
+      }
+    } 
   }, [count]);
 
   // Provides options for when to show an HTML element (https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
@@ -154,21 +166,21 @@ const Note = () => {
     setCommentsList(commentsList.concat(
       // This is a hack :/
 
-      <div className='commentsArray' key={commentsList.length} id={commentsList.length} style={{ position: 'absolute', top: i * commentsList.length, left: '50%', transform: 'translate(-50%)' }}>
-        <Comment length={commentsList.length+1}/>
+      <div className='commentsArray' key={commentsList.length} id={commentsList.length} style={{ position: 'absolute', top: commentButtonPoint.y, left: '50%', transform: 'translate(-50%)' }}>
+        <Comment length={commentsList.length+1} newCommentHeight={commentButtonPoint.y}/>
       </div>
     ));
     i += 100;
     setCommentHover(false);
   }
 
-  const loadComment = () => {
+  const loadComment = (commentHeight, savedComments) => {
 
     setCommentsList(commentsList.concat(
       // This is a hack :/
 
-      <div className='commentsArray' key={commentsList.length} id={commentsList.length} style={{ position: 'absolute', top: i * commentsList.length, left: '50%', transform: 'translate(-50%)' }}>
-        <Comment length={commentsList.length+1}/>
+      <div className='commentsArray' key={commentsList.length} id={commentsList.length} style={{ position: 'absolute', top: commentHeight, left: '50%', transform: 'translate(-50%)' }}>
+        <Comment length={commentsList.length+1} allComments={savedComments} />
       </div>
     ));
 
@@ -253,7 +265,7 @@ const Note = () => {
                   setCodeField(value);
                 }}
               />
-              <button onClick={handleSave}>SAVE</button>
+              <button onClick={handleSave} style = {{color:'white'}}>SAVE</button>
             </div>
 
           </div>

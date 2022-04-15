@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import "./comment.css";
 
-const Comment = ({length}) => {
+const Comment = ({length, newCommentHeight}) => {
   const [text, setText] = useState("");
   const [titleError, setTitleError] = useState(false);
   const [inputError, setInputError] = useState(false);
   const [type, setType] = useState("Comment");
+  const [savedTitle, setSavedTitle] = useState("Comment");
+  const [savedInput, setSavedInput] = useState("Comment");
   console.log(length);
+  console.log(newCommentHeight);
   // @desc
   // This makes the text area increase height automatically
   // https://stackoverflow.com/a/53426195/18401461
@@ -34,7 +37,25 @@ const Comment = ({length}) => {
   const handleSubmit = () => {
     const title = document.getElementById("titleInput"+length);
     const input = document.getElementById("input"+length);
-    
+    console.log("HANDLE SUBMITv");
+    console.log(length);
+    console.log(newCommentHeight);
+    console.log(title.value);
+    console.log(input.value);
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: "4231243@gmail.com", currentComment: length, comments: [{ height: newCommentHeight, title: title.value, input: input.value}]})
+    };
+    fetch("http://localhost:5000/comment", requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Something went wrong');
+      })
+      .catch((error) => console.log(error))
+
 
     // If clicking on Edit button, make the Comment component editable
     if (type === "Edit") {
@@ -58,8 +79,6 @@ const Comment = ({length}) => {
         setTitleError(false);
         setInputError(false);
         setType("Edit");
-        console.log(title.value);
-        console.log(input.value);
       }
     }
   };
@@ -75,36 +94,24 @@ const Comment = ({length}) => {
 
     //Get code from database
     useEffect(() => {
-      const title = document.getElementById("titleInput"+length);
-      const input = document.getElementById("input"+length);
-      title.value = "Title"+length;
-      input.value = "Input"+length;
-
-  
-      // If clicking on Edit button, make the Comment component editable
-      if (type === "Edit") {
-        title.removeAttribute("readonly");
-        input.removeAttribute("readonly");
-        setType("Comment");
-      }
-      // If clicking on Comment button, make the Comment submit
-      else {
-        if (title.value === "" || input.value === "") {
-          if (title.value === "") {
-            setTitleError(true);
-          }
-          if (input.value === "") {
-            setInputError(true);
-          }
-        } else {
-          title.setAttribute("readonly", true);
-          input.setAttribute("readonly", true);
-  
-          setTitleError(false);
-          setInputError(false);
-          setType("Edit");
-        }
-      }
+      console.log("HITS");
+      const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      };
+      fetch("http://localhost:5000/comment", requestOptions)
+        .then(res => res.json())
+        .then(
+          result => {
+            if(result[0].comments[length-1].title !== undefined){
+              const title = document.getElementById("titleInput"+length);
+              const input = document.getElementById("input"+length);
+              title.value = result[0].comments[length-1].title;
+              input.value = result[0].comments[length-1].input;
+              console.log("HITS2");
+            }
+          },
+        )
     }, []);
 
   return (
