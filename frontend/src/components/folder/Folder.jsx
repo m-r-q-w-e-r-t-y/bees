@@ -17,7 +17,7 @@ class Folder extends Component {
         this.renameDocument = this.renameDocument.bind(this);
     }
     state = {  
-        documents: ["test"],
+        documents: [],
         renaming: "false"
     };
 
