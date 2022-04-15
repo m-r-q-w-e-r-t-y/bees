@@ -2,6 +2,17 @@ import React, { Component } from "react";
 import "./navbar.css";
 
 export default class NavBar extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {searchedDocument: ''};
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
   render() {
     return (
       <div className="Navbar">

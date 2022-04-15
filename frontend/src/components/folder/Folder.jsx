@@ -6,7 +6,7 @@ import CreateDocument from "./createDocument";
 import Document from "./document";
 import Menu from "./menu.jsx"
 import NameNewDocument from "./nameNewDocument";
-
+import NavBar from "../navBar/NavBar";
 class Folder extends Component {
 
     constructor(props) {
@@ -15,6 +15,7 @@ class Folder extends Component {
         this.cancelNaming = this.cancelNaming.bind(this);
         this.addDocument = this.addDocument.bind(this);
         this.renameDocument = this.renameDocument.bind(this);
+        this.removeDocument = this.removeDocument.bind(this);
     }
     state = {  
         documents: ["test"],
@@ -24,7 +25,11 @@ class Folder extends Component {
     prependDocument(name){
         this.setState(this.state.documents.unshift({name})) // this is going into this.state -> documents -> {prepending a document}. 
     }
-    
+    removeDocument(name){
+        this.setState({
+            documents: this.state.documents.filter(document => document != name )
+        })
+    }
     createDocumentHandler(){
         this.setState({
             renaming:"true"
@@ -61,7 +66,7 @@ class Folder extends Component {
         else{
             return(
                 <>
-                    {this.state.documents.map(document => (<Document renameHandler = {this.renameDocument} name={document}> </Document>) )}
+                    {this.state.documents.map(document => (<Document removeHandler = {this.removeDocument} renameHandler = {this.renameDocument} name={document}> </Document>) )}
                     <CreateDocumentCircle handler = {this.createDocumentHandler}></CreateDocumentCircle>
                 </>
             )
@@ -74,11 +79,16 @@ class Folder extends Component {
         }
     }
     render() { 
+        
         return (
-            <div className = "folder" >
-                {this.renderDocuments()}
-                {this.renderNaming()}
-            </div>
+            <>
+                <NavBar />
+                <div className = "folder" >
+                    {this.renderDocuments()}
+                    {this.renderNaming()}
+                    
+                </div>
+            </>
         );
     }
 }
