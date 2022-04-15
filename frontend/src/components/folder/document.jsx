@@ -61,6 +61,7 @@ class Document extends Component {
     render() { 
         return (
             <div className = "document">
+                
                 <div className = "documentCard" >  
                     <img src={require("./file.png")} className = "documentImage" alt="document image"  />
                     <img  src={require("./hamburger.png")} className = "documentHamburger" onClick = {this.handleMenuClick} alt="" />

@@ -22,6 +22,7 @@ class Folder extends Component {
         renaming: "false"
     };
 
+
     prependDocument(name){
         this.setState(this.state.documents.unshift({name})) // this is going into this.state -> documents -> {prepending a document}. 
     }
@@ -46,7 +47,7 @@ class Folder extends Component {
             documents: this.state.documents.concat([documentName])
         })
     }
-
+    
 
     renameDocument(oldName, newName){
         if(this.state.documents.includes(oldName)){
