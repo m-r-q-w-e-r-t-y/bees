@@ -18,7 +18,7 @@ class Folder extends Component {
         this.removeDocument = this.removeDocument.bind(this);
     }
     state = {  
-        documents: ["test"],
+        documents: [],
         renaming: "false"
     };
 
@@ -81,6 +81,7 @@ class Folder extends Component {
     render() { 
         
         return (
+<<<<<<< HEAD
             <>
                 <NavBar />
                 <div className = "folder" >
@@ -89,6 +90,13 @@ class Folder extends Component {
                     
                 </div>
             </>
+=======
+            <div className = "folder" >
+                {this.renderDocuments()}
+                {this.renderNaming()}
+                
+            </div>
+>>>>>>> #43-folderPage-remove-document
         );
     }
 }
