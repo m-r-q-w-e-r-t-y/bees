@@ -34,7 +34,9 @@ class Document extends Component {
         if(this.state.showMenu === true){
             return (
                 <Menu 
+                    documentName = {this.props.name}
                     startNamingHandler = {this.startNaming}
+                    removeHandler = {this.props.removeHandler}
                 ></Menu>
             )
         }
