@@ -20,7 +20,12 @@ class Document extends Component {
     renderRenameForm(){
         if(this.state.renaming == true){
             return(
-                <RenameDocument documentName = {this.props.name}cancelHandler = {this.cancelNaming}></RenameDocument>   
+                <RenameDocument 
+                    documentName = {this.props.name}
+                    cancelHandler = {this.cancelNaming}
+                    renameHandler = {this.props.renameHandler} 
+                    
+                ></RenameDocument>   
             )
         }
     }
@@ -29,8 +34,6 @@ class Document extends Component {
         if(this.state.showMenu === true){
             return (
                 <Menu 
-                    renameHandler = {this.props.renameHandler} 
-                    document = {this.props.name} 
                     startNamingHandler = {this.startNaming}
                 ></Menu>
             )

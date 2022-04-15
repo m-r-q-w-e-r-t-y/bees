@@ -21,6 +21,7 @@ class NameNewDocument extends Component  {
       handleSubmit(event) {
         if(this.state.value.length > 0){
           this.props.addDocumentHandler(this.state.value);
+          this.props.cancelHandler();
           event.preventDefault(); 
         }
         else{

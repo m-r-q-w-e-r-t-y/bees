@@ -17,14 +17,14 @@ class RenameDocument extends Component  {
         this.setState({value: event.target.value});
       }
       
-    //Adds document to folder page with the name entered.
+      //Renames the document
       handleSubmit(event) {
-        if(this.state.value.length > 0){
-          this.props.addDocumentHandler(this.state.value);
-          event.preventDefault(); 
+        if(this.state.value.length == 0){
+          alert("Document name can't be empty")
         }
         else{
-          alert("Document Name Can't Be Empty");
+          this.props.renameHandler(this.props.documentName, this.state.value)
+          this.props.cancelHandler();
         }
       }
 

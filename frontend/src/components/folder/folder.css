@@ -27,9 +27,11 @@
     box-shadow: 0px 4px 30px rgba(0,0,0,0.25);
     margin: 96px 24px 24px 24px;
     padding: 32px 4px 24px 4px;
+    transition-duration:0.3s ;
 }
 .documentCard:hover {
     cursor: pointer;
+    transform: scale(1.1);
 }
 .documentImage{
     width: 100px;
@@ -80,7 +82,8 @@
     cursor: default;
 }
 .createDocumentCard:hover{
-    cursor:pointer
+    cursor:pointer;
+    transform: scale(1.1);
 }
 .createDocumentImage{
     width: 100px;
@@ -155,6 +158,7 @@
 .menuList{
     position: relative;
     margin-left: 300px;
+    margin-top: -70px;
     opacity:100 ;
     background-color: white;
     display: flex;
@@ -162,6 +166,8 @@
     list-style: none;
     box-shadow: 0px 4px 30px rgba(0,0,0,0.25);
     padding: 0;
+    overflow: visible;
+
 }
 
 .menuItem{
