@@ -156,9 +156,9 @@
     cursor:pointer;
 }
 .menuList{
-    position: relative;
+    position: fixed;
     margin-left: 300px;
-    margin-top: -70px;
+    margin-top: 300px;
     opacity:100 ;
     background-color: white;
     display: flex;
