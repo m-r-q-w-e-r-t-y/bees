@@ -18,7 +18,7 @@ class Folder extends Component {
         this.removeDocument = this.removeDocument.bind(this);
     }
     state = {  
-        documents: ["test"],
+        documents: [],
         renaming: "false"
     };
 
