@@ -41,7 +41,6 @@ class Folder extends Component {
             renaming:"false"
         })
     }
-
     addDocument(documentName){
         this.setState({
             documents: this.state.documents.concat([documentName])
