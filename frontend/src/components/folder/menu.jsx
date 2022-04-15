@@ -16,7 +16,7 @@ class Menu extends Component {
         return (
             <ul className="menuList">
                 <li className="menuItem" onClick={this.props.startNamingHandler}>Rename</li>
-                <li className="menuItem">Open</li>
+                <a  href = "http://localhost:3000/noteviewpage" className="menuItem">Open</a>
                 <li className="menuItem" onClick={this.handleRemove}>Remove</li>
                 <li className="menuItem">Share</li>
             </ul>

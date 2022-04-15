@@ -16,7 +16,6 @@ class Document extends Component {
         this.cancelNaming = this.cancelNaming.bind(this)
         this.startNaming = this.startNaming.bind(this)
     }
-    
     renderRenameForm(){
         if(this.state.renaming == true){
             return(
@@ -29,7 +28,6 @@ class Document extends Component {
             )
         }
     }
-
     renderDropdownMenu(){
         if(this.state.showMenu === true){
             return (
@@ -41,7 +39,6 @@ class Document extends Component {
             )
         }
     }
-
     startNaming(){
         this.setState({
             renaming:true
@@ -52,7 +49,6 @@ class Document extends Component {
             renaming:false
         })
     }
-
     handleMenuClick(){
         this.setState({
             showMenu: !this.state.showMenu
@@ -63,7 +59,7 @@ class Document extends Component {
             <div className = "document">
                 
                 <div className = "documentCard" >  
-                    <img src={require("./file.png")} className = "documentImage" alt="document image"  />
+                    <img href src={require("./file.png")} className = "documentImage" alt="document image"  />
                     <img  src={require("./hamburger.png")} className = "documentHamburger" onClick = {this.handleMenuClick} alt="" />
  
                 </div>
