@@ -81,6 +81,7 @@ const Note = () => {
         result => {
           if(result[0].comments.length > 0){
             setSavedComments(result[0].comments);
+            console.log("getComments"+savedComments);
             setCommentHeight(result[0].comments[0].height);
           }
           setCodeField(result[0].code);
@@ -161,13 +162,12 @@ const Note = () => {
 
 
 
-  const addComment = () => {
-
+  const addComment = (savedComments) => {
     setCommentsList(commentsList.concat(
       // This is a hack :/
 
       <div className='commentsArray' key={commentsList.length} id={commentsList.length} style={{ position: 'absolute', top: commentButtonPoint.y, left: '50%', transform: 'translate(-50%)' }}>
-        <Comment length={commentsList.length+1} newCommentHeight={commentButtonPoint.y}/>
+        <Comment length={commentsList.length+1} newCommentHeight={commentButtonPoint.y} allComments={savedComments}/>
       </div>
     ));
     i += 100;
@@ -180,7 +180,7 @@ const Note = () => {
       // This is a hack :/
 
       <div className='commentsArray' key={commentsList.length} id={commentsList.length} style={{ position: 'absolute', top: commentHeight, left: '50%', transform: 'translate(-50%)' }}>
-        <Comment length={commentsList.length+1} allComments={savedComments} />
+        <Comment length={commentsList.length+1} allComments={savedComments}/>
       </div>
     ));
 
@@ -217,9 +217,6 @@ const Note = () => {
   const handleSelectLanguage = (event) => {
     setLanguage(lang[event.target.value])
   }
-
-
-
 
   return (
 

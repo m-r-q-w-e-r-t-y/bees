@@ -87,3 +87,8 @@
   transform-origin: center;
   transform: translate(-50%, -50%) rotate(-45deg); /* Only difference between the other line. This is this: '/' */
 }
+
+.Hiddenvalueholder {
+  visibility: hidden;
+  display: none;
+}

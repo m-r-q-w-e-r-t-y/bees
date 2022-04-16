@@ -15,8 +15,8 @@ const fileSchema = mongoose.Schema({
         type: "String",
         require: [false, ''],
     },
-    currentComment: {
-        type: Number,
+    commentId: {
+        type: String,
         required: [false, ''],
     },
     comments: [{

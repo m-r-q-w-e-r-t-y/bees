@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import "./comment.css";
 
-const Comment = ({length, newCommentHeight}) => {
+const Comment = ({length, newCommentHeight, allComments}) => {
   const [text, setText] = useState("");
   const [titleError, setTitleError] = useState(false);
   const [inputError, setInputError] = useState(false);
   const [type, setType] = useState("Comment");
   const [savedTitle, setSavedTitle] = useState("Comment");
   const [savedInput, setSavedInput] = useState("Comment");
-  console.log(length);
-  console.log(newCommentHeight);
+  const [savedComments, setSavedComments ] = useState([]);
+
   // @desc
   // This makes the text area increase height automatically
   // https://stackoverflow.com/a/53426195/18401461
@@ -37,15 +37,21 @@ const Comment = ({length, newCommentHeight}) => {
   const handleSubmit = () => {
     const title = document.getElementById("titleInput"+length);
     const input = document.getElementById("input"+length);
-    console.log("HANDLE SUBMITv");
-    console.log(length);
-    console.log(newCommentHeight);
-    console.log(title.value);
-    console.log(input.value);
+    const height = document.getElementById("height"+length);
+    const commentid = document.getElementById("commentid"+length);
+    console.log(commentid.value);
+    if(newCommentHeight !== undefined){
+      height.value = newCommentHeight;
+    }
+
+    if(!commentid.value){
+      commentid.value = "000000000000000000000000"
+    }
+    
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: "4231243@gmail.com", currentComment: length, comments: [{ height: newCommentHeight, title: title.value, input: input.value}]})
+      body: JSON.stringify({ email: "4231243@gmail.com", commentId: commentid.value, comments: [{ height: parseFloat(height.value), title: title.value, input: input.value}]})
     };
     fetch("http://localhost:5000/comment", requestOptions)
       .then((response) => {
@@ -103,12 +109,21 @@ const Comment = ({length, newCommentHeight}) => {
         .then(res => res.json())
         .then(
           result => {
+            setSavedComments(result[0].comments);
             if(result[0].comments[length-1].title !== undefined){
               const title = document.getElementById("titleInput"+length);
               const input = document.getElementById("input"+length);
+              const height = document.getElementById("height"+length);
+              const commentid = document.getElementById("commentid"+length);
               title.value = result[0].comments[length-1].title;
               input.value = result[0].comments[length-1].input;
-              console.log("HITS2");
+              height.value = result[0].comments[length-1].height;
+              commentid.value = result[0].comments[length-1]._id;
+              title.setAttribute("readonly", true);
+              input.setAttribute("readonly", true);
+              setTitleError(false);
+              setInputError(false);
+              setType("Edit");
             }
           },
         )
@@ -151,6 +166,14 @@ const Comment = ({length, newCommentHeight}) => {
               className="input textareaInput"
               onChange={calculateHeight}
               placeholder="Comment..."
+            />
+            <textarea
+              id={"height"+length}
+              className="Hiddenvalueholder"
+            />
+            <textarea
+              id={"commentid"+length}
+              className="Hiddenvalueholder"
             />
           </div>
           <button onClick={handleSubmit}>{type}</button>

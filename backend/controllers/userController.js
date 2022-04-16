@@ -229,18 +229,27 @@ const noteUser = asyncHandler(async (req, res) => {
 });
 
 const commentUser = asyncHandler(async (req, res) => {
-  const { email, currentComment, comments } = req.body;
+  const { email, commentId, comments } = req.body;
   const filter = { email: email };
-  
-  await Files.findOneAndUpdate(filter, 
-    { $push: { 
-      comments: {
-        height : comments[0].height,
-        title : comments[0].title,
-        input: comments[0].input
-        }  
-    } 
-  })
+  const ObjectId = mongoose.Types.ObjectId;
+  const found = await Files.findOne({comments:{$elemMatch:{_id: ObjectId(commentId)}}});
+  if(found){
+    await Files.updateOne(
+      {comments:{$elemMatch:{_id: ObjectId(commentId)}}},
+      {$set : {"comments.$.title" : comments[0].title, "comments.$.input" : comments[0].input}
+    })
+  }
+  else{
+    await Files.findOneAndUpdate(filter, 
+      { $push: { 
+        comments: {
+          height : comments[0].height,
+          title : comments[0].title,
+          input: comments[0].input
+          }  
+      } 
+    })
+  }
 });
 
 module.exports = {
@@ -262,6 +271,7 @@ module.exports = {
 
 const nodemailer = require('nodemailer');
 const { db } = require("../models/fileModel");
+const { default: mongoose } = require("mongoose");
 
 let transporter = nodemailer.createTransport({
   service: 'gmail',
