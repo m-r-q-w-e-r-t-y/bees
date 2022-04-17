@@ -3,7 +3,8 @@ import { useState, useEffect, useCallback } from 'react'
 // import 'prismjs/components/prism-clike';
 // import 'prismjs/components/prism-javascript';
 import CodeMirror from '@uiw/react-codemirror';
-import Comment from '../comment/Comment.jsx'
+import Comment from '../comment/Comment.jsx';
+import { handleSubmit } from '../comment/Comment.jsx'
 import { python } from '@codemirror/legacy-modes/mode/python';   // npm i @codemirror/legacy-modes
 import { swift } from '@codemirror/legacy-modes/mode/swift';   // npm i @codemirror/legacy-modes
 import { javascript } from '@codemirror/legacy-modes/mode/javascript';   // npm i @codemirror/legacy-modes
@@ -12,19 +13,22 @@ import { c } from '@codemirror/legacy-modes/mode/clike';   // npm i @codemirror/
 import { StreamLanguage } from '@codemirror/stream-parser';    // npm i @codemirror/stream-parser
 import "./note.css"
 
-const Note = () => {  
+const Note = () => {
 
   // Variables for highlighting page
-  const [commentButtonPoint, setCommentButtonPoint] = useState({x:0, y:0});           // Tells Comment button where to position
+  const [commentButtonPoint, setCommentButtonPoint] = useState({ x: 0, y: 0 });           // Tells Comment button where to position
   const [commentHover, setCommentHover] = useState(false);                            // Shows Comment button on true. Removes in false
   const [commentsList, setCommentsList] = useState([]);                               // Comment list that shows on the left
   const [visibleComments, setVisibleComments] = useState(true);                       // Hides or unhides the comments for viewing
   const [codefield, setCodeField] = useState("");
+  const [savedComments, setSavedComments ] = useState([]);
+  const [commentHeight, setCommentHeight ] = useState(0);
+  const [commentAmount, setCommentAmount ] = useState();
   const [language, setLanguage] = useState(javascript)                                // Used for syntax highlighting
-  
+  const [count, setCount] = useState(0);
   // Code that is shown on the CodeMirror editor. Can use MongoDB to make dynamic
   var code = codefield;
-
+  var i = 200;
 
   const lang = {
     "py": python,
@@ -48,25 +52,21 @@ const Note = () => {
 
   //Store code in database
   const handleSave = (event) => {
-    // const title = document.getElementById("titleInput")
-    // const input = document.getElementById("input")
-    console.log(commentsList[0])
-    //console.log(title.value)
-    //console.log(input.value)
+    console.log(code)
     event.preventDefault()
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: "4231243@gmail.com", filename: "test", code: code })
-  };
-  fetch("http://localhost:5000/note", requestOptions)
-  .then( (response) => {
-      if (response.ok) {
+    };
+    fetch(process.env.REACT_APP_API + "/note", requestOptions)
+      .then((response) => {
+        if (response.ok) {
           return response.json();
-      }
-      throw new Error('Something went wrong');
-  })
-  .catch( (error) => console.log(error))
+        }
+        throw new Error('Something went wrong');
+      })
+      .catch((error) => console.log(error))
   }
 
   //Get code from database
@@ -74,14 +74,32 @@ const Note = () => {
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-  };
-  fetch("http://localhost:5000/note", requestOptions)
-  .then(res => res.json())
-  .then(
-    result => {
-      setCodeField(result[0].code);
-    },
-  )}, []);
+    };
+    fetch(process.env.REACT_APP_API + "/note", requestOptions)
+      .then(res => res.json())
+      .then(
+        result => {
+          if(result[0].comments.length > 0){
+            setSavedComments(result[0].comments);
+            console.log("getComments"+savedComments);
+            setCommentHeight(result[0].comments[0].height);
+          }
+          setCodeField(result[0].code);
+          setCount(count+1);
+        },
+      )
+  }, []);
+
+  useEffect(() => {
+    if(savedComments !== undefined && savedComments.length !== 0){
+      console.log(savedComments);
+      loadComment(savedComments[count-1].height, savedComments);
+      console.log(savedComments[count-1].height);
+      if(count < savedComments.length){
+        setCount(count+1);
+      }
+    } 
+  }, [count]);
 
   // Provides options for when to show an HTML element (https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
   const handleOptions = {
@@ -102,10 +120,10 @@ const Note = () => {
       const boxOutline = selection.getRangeAt(0).getBoundingClientRect();
 
       const codeBlock = document.getElementsByClassName("cm-gutter cm-lineNumbers")[0].getBoundingClientRect()
-      const x = codeBlock.width-75                                                     // 75 is about the width of the grey number bar. This pushes the button to the left outside the codebox
-      let y = boxOutline.y-codeBlock.top;                                              // Subtracking codeBlock.top because the code section makes selection.y be too big. 
-      
-      
+      const x = codeBlock.width - 75                                                     // 75 is about the width of the grey number bar. This pushes the button to the left outside the codebox
+      let y = boxOutline.y - codeBlock.top;                                              // Subtracking codeBlock.top because the code section makes selection.y be too big. 
+
+
       /* Ignore this snippet. Don't delete
        let y;
        Use this section if you want to statically set the size of the codeblock
@@ -117,7 +135,7 @@ const Note = () => {
        }
       */
 
-      setCommentButtonPoint({x:x, y:y});
+      setCommentButtonPoint({ x: x, y: y });
       setCommentHover(true);
     }
   }, [setCommentButtonPoint, setCommentHover]);
@@ -126,7 +144,7 @@ const Note = () => {
   // Removes the comment button after clicking anywhere that is not the button itself
   const handleClick = useCallback((event) => {
     const id = event.target.id;
-    if (id !== "comment"){
+    if (id !== "comment") {
       setCommentHover(false);
     }
   }, [setCommentHover]);
@@ -144,13 +162,29 @@ const Note = () => {
 
 
 
-  const addComment = () => {
+  const addComment = (savedComments) => {
     setCommentsList(commentsList.concat(
       // This is a hack :/
-      <div className='commentsArray' key={commentsList.length} id={commentsList.length} style={{position: 'absolute', top: commentButtonPoint.y, left: '50%', transform: 'translate(-50%)'}}>
-        <Comment/>
+
+      <div className='commentsArray' key={commentsList.length} id={commentsList.length} style={{ position: 'absolute', top: commentButtonPoint.y, left: '50%', transform: 'translate(-50%)' }}>
+        <Comment length={commentsList.length+1} newCommentHeight={commentButtonPoint.y} allComments={savedComments}/>
       </div>
     ));
+    i += 100;
+    setCommentHover(false);
+  }
+
+  const loadComment = (commentHeight, savedComments) => {
+
+    setCommentsList(commentsList.concat(
+      // This is a hack :/
+
+      <div className='commentsArray' key={commentsList.length} id={commentsList.length} style={{ position: 'absolute', top: commentHeight, left: '50%', transform: 'translate(-50%)' }}>
+        <Comment length={commentsList.length+1} allComments={savedComments}/>
+      </div>
+    ));
+
+    i += 100;
     setCommentHover(false);
   }
 
@@ -184,10 +218,8 @@ const Note = () => {
     setLanguage(lang[event.target.value])
   }
 
-
-
-
   return (
+
     <div className="App">
       <header className="App-header">
         <div>
@@ -200,11 +232,11 @@ const Note = () => {
           <div className="viewButtonLine1"></div>
           <div className="viewButtonLine2"></div>
         </div>
-        
+
         {/* This is diving into two sections. This is for dividing one section left and the other right */}
         <div className="row">
           <div className="comments">
-            { commentsList }
+            {commentsList}
           </div>
           <div className="code">
 
@@ -218,20 +250,21 @@ const Note = () => {
                   <option value="c">C</option>
                 </select>
               </div>
-              { commentHover ? <button id="comment" style={{ position: 'absolute', display: 'inline-block', left: commentButtonPoint.x, top: commentButtonPoint.y}} onClick={addComment}>Click</button> : <></>}
+              {commentHover ? <button id="comment" style={{ position: 'absolute', display: 'inline-block', left: commentButtonPoint.x, top: commentButtonPoint.y }} onClick={addComment}>Click</button> : <></>}
               <CodeMirror
                 value={code}
                 height="auto"
                 // height="100vh"
                 width="55vw"
-                extensions={StreamLanguage.define(language) } 
+                extensions={StreamLanguage.define(language)}
                 onChange={(value, viewUpdate) => {
                   console.log('value:', value);
+                  setCodeField(value);
                 }}
               />
-            <button onClick={handleSave}>SAVE</button>
+              <button onClick={handleSave} style = {{color:'white'}}>SAVE</button>
             </div>
-            
+
           </div>
         </div>
 

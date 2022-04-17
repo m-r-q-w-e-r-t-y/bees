@@ -14,7 +14,25 @@ const fileSchema = mongoose.Schema({
     code: {
         type: "String",
         require: [false, ''],
-    }
+    },
+    commentId: {
+        type: String,
+        required: [false, ''],
+    },
+    comments: [{
+        height: {
+            type: Number,
+            required: [false, ''],
+        },
+        title: {
+            type: String,
+            required: [false, ''],
+        },
+        input: {
+            type: String,
+            required: [false, ''],
+        },
+    }]
 
 }, {
     timestamps: true,

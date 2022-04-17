@@ -40,7 +40,12 @@ const notePage = async (req, res) => {
   const notes = await Files.find();
 
   res.status(200).json(notes);
+};
 
+const commentPage = async (req, res) => {
+  const comments = await Files.find();
+
+  res.status(200).json(comments);
 };
 
 // @desc    Submit new user
@@ -212,7 +217,6 @@ const noteUser = asyncHandler(async (req, res) => {
   const update = { code: code };
 
   const fileExists = await Files.findOneAndUpdate(filter, update);
-
   if(!fileExists){
     throw new Error(`Invalid Code\n`);
   }
@@ -222,6 +226,30 @@ const noteUser = asyncHandler(async (req, res) => {
     })
   }
 
+});
+
+const commentUser = asyncHandler(async (req, res) => {
+  const { email, commentId, comments } = req.body;
+  const filter = { email: email };
+  const ObjectId = mongoose.Types.ObjectId;
+  const found = await Files.findOne({comments:{$elemMatch:{_id: ObjectId(commentId)}}});
+  if(found){
+    await Files.updateOne(
+      {comments:{$elemMatch:{_id: ObjectId(commentId)}}},
+      {$set : {"comments.$.title" : comments[0].title, "comments.$.input" : comments[0].input}
+    })
+  }
+  else{
+    await Files.findOneAndUpdate(filter, 
+      { $push: { 
+        comments: {
+          height : comments[0].height,
+          title : comments[0].title,
+          input: comments[0].input
+          }  
+      } 
+    })
+  }
 });
 
 module.exports = {
@@ -235,11 +263,15 @@ module.exports = {
   resetUser,
   resetPage,
   noteUser,
-  notePage
+  notePage,
+  commentUser,
+  commentPage
 };
 
 
 const nodemailer = require('nodemailer');
+const { db } = require("../models/fileModel");
+const { default: mongoose } = require("mongoose");
 
 let transporter = nodemailer.createTransport({
   service: 'gmail',
