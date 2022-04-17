@@ -3,213 +3,40 @@ import { useState, useEffect, useCallback } from 'react'
 // import 'prismjs/components/prism-clike';
 // import 'prismjs/components/prism-javascript';
 import CodeMirror from '@uiw/react-codemirror';
-import Comment from '../comment/Comment.jsx'
+import Comment from '../comment/Comment.jsx';
+import { handleSubmit } from '../comment/Comment.jsx'
+import { python } from '@codemirror/legacy-modes/mode/python';   // npm i @codemirror/legacy-modes
+import { swift } from '@codemirror/legacy-modes/mode/swift';   // npm i @codemirror/legacy-modes
+import { javascript } from '@codemirror/legacy-modes/mode/javascript';   // npm i @codemirror/legacy-modes
+import { go } from '@codemirror/legacy-modes/mode/go';   // npm i @codemirror/legacy-modes
+import { c } from '@codemirror/legacy-modes/mode/clike';   // npm i @codemirror/legacy-modes
+import { StreamLanguage } from '@codemirror/stream-parser';    // npm i @codemirror/stream-parser
 import "./note.css"
 
-const Note = () => {  
+const Note = () => {
 
   // Variables for highlighting page
-  const [commentButtonPoint, setCommentButtonPoint] = useState({x:0, y:0});           // Tells Comment button where to position
+  const [commentButtonPoint, setCommentButtonPoint] = useState({ x: 0, y: 0 });           // Tells Comment button where to position
   const [commentHover, setCommentHover] = useState(false);                            // Shows Comment button on true. Removes in false
   const [commentsList, setCommentsList] = useState([]);                               // Comment list that shows on the left
   const [visibleComments, setVisibleComments] = useState(true);                       // Hides or unhides the comments for viewing
-  
+  const [codefield, setCodeField] = useState("");
+  const [savedComments, setSavedComments ] = useState([]);
+  const [commentHeight, setCommentHeight ] = useState(0);
+  const [commentAmount, setCommentAmount ] = useState();
+  const [language, setLanguage] = useState(javascript)                                // Used for syntax highlighting
+  const [count, setCount] = useState(0);
   // Code that is shown on the CodeMirror editor. Can use MongoDB to make dynamic
-  const code = `//
-  //  ViewController.swift
-  //  Yelpy
-  //
-  //  Created by Memo on 5/21/20.
-  //  Copyright © 2020 memo. All rights reserved.
-  //
-  
-  import UIKit
-  import AlamofireImage
-  import Lottie
-  import SkeletonView
-  
-  class RestaurantsViewController: UIViewController {
-          
-      // Outlets
-      @IBOutlet weak var tableView: UITableView!
-      var restaurantsArray: [Restaurant] = []
-      
-      @IBOutlet weak var searchBar: UISearchBar!
-      var filteredRestaurants: [Restaurant] = []
-      
-      // Variable inits
-      var animationView: AnimationView?
-      var refresh = true
-      
-      let yelpRefresh = UIRefreshControl()
-      
-  
-      override func viewDidLoad() {
-          super.viewDidLoad()
-          
-          startAnimations()
-          // Table View
-          tableView.visibleCells.forEach { $0.showSkeleton() }
-          tableView.delegate = self
-          tableView.dataSource = self
-          
-          // Search Bar delegate
-          searchBar.delegate = self
-      
-      
-          // Get Data from API
-          getAPIData()
-          
-          yelpRefresh.addTarget(self, action: #selector(getAPIData), for: .valueChanged)
-          tableView.refreshControl = yelpRefresh
-      }
-      
-      
-      @objc func getAPIData() {
-         
-          API.getRestaurants() { (restaurants) in
-              guard let restaurants = restaurants else {
-                  return
-              }
-              
-              self.restaurantsArray = restaurants
-              self.filteredRestaurants = restaurants
-              self.tableView.reloadData()
-              
-              // MARK: LAB6 Checking for coordinates
-  //            for rest in self.restaurantsArray {
-  //                 print("COORDINATES", rest.coordinates)
-  //             }
-              
-              Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(self.stopAnimations), userInfo: nil, repeats: false)
-          
-              self.yelpRefresh.endRefreshing()
-              
-          }
-      }
-      
-      
-  
+  var code = codefield;
+  var i = 200;
+
+  const lang = {
+    "py": python,
+    "swift": swift,
+    "js": javascript,
+    "go": go,
+    "c": c
   }
-  
-  extension RestaurantsViewController: SkeletonTableViewDataSource {
-      
-      
-      func startAnimations() {
-          // Start Skeleton
-          view.isSkeletonable = true
-          
-          animationView = .init(name: "4762-food-carousel")
-          // Set the size to the frame
-          //animationView!.frame = view.bounds
-          animationView!.frame = CGRect(x: view.frame.width / 3 , y: 156, width: 100, height: 100)
-  
-          // fit the
-          animationView!.contentMode = .scaleAspectFit
-          view.addSubview(animationView!)
-          
-          // 4. Set animation loop mode
-          animationView!.loopMode = .loop
-  
-          // Animation speed - Larger number = faste
-          animationView!.animationSpeed = 5
-  
-          //  Play animation
-          animationView!.play()
-          
-      }
-      
-  
-      @objc func stopAnimations() {
-          // ----- Stop Animation
-          animationView?.stop()
-          // ------ Change the subview to last and remove the current subview
-          view.subviews.last?.removeFromSuperview()
-          view.hideSkeleton()
-          refresh = false
-      }
-      
-  
-      func collectionSkeletonView(_ skeletonView: UITableView, cellIdentifierForRowAt indexPath: IndexPath) -> ReusableCellIdentifier {
-          return "RestaurantCell"
-      }
-      
-  }
-  
-  // ––––– TableView Functionality –––––
-  extension RestaurantsViewController: UITableViewDelegate, UITableViewDataSource {
-      
-      
-      
-      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-          return filteredRestaurants.count
-      }
-      
-      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-          // Create Restaurant Cell
-          let cell = tableView.dequeueReusableCell(withIdentifier: "RestaurantCell") as! RestaurantCell
-          // Set cell's restaurant
-          cell.r = filteredRestaurants[indexPath.row]
-          
-          // Initialize skeleton view every time cell gets initialized
-          cell.showSkeleton()
-          
-          // Stop animation after like .5 seconds
-          Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { (timer) in
-              cell.stopSkeletonAnimation()
-              cell.hideSkeleton()
-          }
-          
-          
-          return cell
-      }
-      
-      
-      // ––––– TODO: Send restaurant object to DetailViewController
-      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-          let cell = sender as! UITableViewCell
-          if let indexPath = tableView.indexPath(for: cell) {
-              let r = filteredRestaurants[indexPath.row]
-              let detailViewController = segue.destination as! RestaurantDetailViewController
-              detailViewController.r = r
-          }
-          
-      }
-      
-  }
-  
-  
-  // ––––– UI SearchBar Functionality –––––
-  extension RestaurantsViewController: UISearchBarDelegate {
-      
-      // Search bar functionality
-      func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-          if searchText != "" {
-              filteredRestaurants = restaurantsArray.filter { (r: Restaurant) -> Bool in
-                return r.name.lowercased().contains(searchText.lowercased())
-              }
-          }
-          else {
-              filteredRestaurants = restaurantsArray
-          }
-          tableView.reloadData()
-      }
-  
-      
-      // Show Cancel button when typing
-      func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-         self.searchBar.showsCancelButton = true
-      }
-         
-      // Logic for searchBar cancel button
-      func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-         searchBar.showsCancelButton = false // remove cancel button
-         searchBar.text = "" // reset search text
-         searchBar.resignFirstResponder() // remove keyboard
-         filteredRestaurants = restaurantsArray // reset results to display
-         tableView.reloadData()
-      }
-  }`;
 
   // Handles what to do when the an HTML element comes into view (https://codepen.io/ryanfinni/pen/VwZeGxN) (https://codepen.io/ryanfinni/pen/jONBEdX)
   const handleIntersection = (entries) => {
@@ -222,6 +49,57 @@ const Note = () => {
       }
     }
   }
+
+  //Store code in database
+  const handleSave = (event) => {
+    console.log(code)
+    event.preventDefault()
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: "4231243@gmail.com", filename: "test", code: code })
+    };
+    fetch(process.env.REACT_APP_API + "/note", requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Something went wrong');
+      })
+      .catch((error) => console.log(error))
+  }
+
+  //Get code from database
+  useEffect(() => {
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    };
+    fetch(process.env.REACT_APP_API + "/note", requestOptions)
+      .then(res => res.json())
+      .then(
+        result => {
+          if(result[0].comments.length > 0){
+            setSavedComments(result[0].comments);
+            console.log("getComments"+savedComments);
+            setCommentHeight(result[0].comments[0].height);
+          }
+          setCodeField(result[0].code);
+          setCount(count+1);
+        },
+      )
+  }, []);
+
+  useEffect(() => {
+    if(savedComments !== undefined && savedComments.length !== 0){
+      console.log(savedComments);
+      loadComment(savedComments[count-1].height, savedComments);
+      console.log(savedComments[count-1].height);
+      if(count < savedComments.length){
+        setCount(count+1);
+      }
+    } 
+  }, [count]);
 
   // Provides options for when to show an HTML element (https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
   const handleOptions = {
@@ -242,10 +120,10 @@ const Note = () => {
       const boxOutline = selection.getRangeAt(0).getBoundingClientRect();
 
       const codeBlock = document.getElementsByClassName("cm-gutter cm-lineNumbers")[0].getBoundingClientRect()
-      const x = codeBlock.width-75                                                     // 75 is about the width of the grey number bar. This pushes the button to the left outside the codebox
-      let y = boxOutline.y-codeBlock.top;                                              // Subtracking codeBlock.top because the code section makes selection.y be too big. 
-      
-      
+      const x = codeBlock.width - 75                                                     // 75 is about the width of the grey number bar. This pushes the button to the left outside the codebox
+      let y = boxOutline.y - codeBlock.top;                                              // Subtracking codeBlock.top because the code section makes selection.y be too big. 
+
+
       /* Ignore this snippet. Don't delete
        let y;
        Use this section if you want to statically set the size of the codeblock
@@ -257,7 +135,7 @@ const Note = () => {
        }
       */
 
-      setCommentButtonPoint({x:x, y:y});
+      setCommentButtonPoint({ x: x, y: y });
       setCommentHover(true);
     }
   }, [setCommentButtonPoint, setCommentHover]);
@@ -266,7 +144,7 @@ const Note = () => {
   // Removes the comment button after clicking anywhere that is not the button itself
   const handleClick = useCallback((event) => {
     const id = event.target.id;
-    if (id !== "comment"){
+    if (id !== "comment") {
       setCommentHover(false);
     }
   }, [setCommentHover]);
@@ -284,13 +162,29 @@ const Note = () => {
 
 
 
-  const addComment = () => {
+  const addComment = (savedComments) => {
     setCommentsList(commentsList.concat(
       // This is a hack :/
-      <div className='commentsArray' key={commentsList.length} id={commentsList.length} style={{position: 'absolute', top: commentButtonPoint.y, left: '50%', transform: 'translate(-50%)'}}>
-        <Comment/>
+
+      <div className='commentsArray' key={commentsList.length} id={commentsList.length} style={{ position: 'absolute', top: commentButtonPoint.y, left: '50%', transform: 'translate(-50%)' }}>
+        <Comment length={commentsList.length+1} newCommentHeight={commentButtonPoint.y} allComments={savedComments}/>
       </div>
     ));
+    i += 100;
+    setCommentHover(false);
+  }
+
+  const loadComment = (commentHeight, savedComments) => {
+
+    setCommentsList(commentsList.concat(
+      // This is a hack :/
+
+      <div className='commentsArray' key={commentsList.length} id={commentsList.length} style={{ position: 'absolute', top: commentHeight, left: '50%', transform: 'translate(-50%)' }}>
+        <Comment length={commentsList.length+1} allComments={savedComments}/>
+      </div>
+    ));
+
+    i += 100;
     setCommentHover(false);
   }
 
@@ -320,10 +214,12 @@ const Note = () => {
   }
 
 
-
-
+  const handleSelectLanguage = (event) => {
+    setLanguage(lang[event.target.value])
+  }
 
   return (
+
     <div className="App">
       <header className="App-header">
         <div>
@@ -336,25 +232,39 @@ const Note = () => {
           <div className="viewButtonLine1"></div>
           <div className="viewButtonLine2"></div>
         </div>
-        
+
         {/* This is diving into two sections. This is for dividing one section left and the other right */}
         <div className="row">
           <div className="comments">
-            { commentsList }
+            {commentsList}
           </div>
           <div className="code">
-            { commentHover ? <button id="comment" style={{ position: 'absolute', display: 'inline-block', left: commentButtonPoint.x, top: commentButtonPoint.y}} onClick={addComment}>Click</button> : <></>}
-            <CodeMirror
-              value={code}
-              height="auto"
-              // height="100vh"
-              width="55vw"
-              // extensions={[javascript({ jsx: true })]}
-              onChange={(value, viewUpdate) => {
-                console.log('value:', value);
-              }}
-            />
-            
+
+            <div className="codeEditor">
+              <div className='selectLanguage'>
+                <select name="" id="" onChange={handleSelectLanguage}>
+                  <option value="py">Python</option>
+                  <option value="swift">Swift</option>
+                  <option value="js">Javascript</option>
+                  <option value="go">Go</option>
+                  <option value="c">C</option>
+                </select>
+              </div>
+              {commentHover ? <button id="comment" style={{ position: 'absolute', display: 'inline-block', left: commentButtonPoint.x, top: commentButtonPoint.y }} onClick={addComment}>Click</button> : <></>}
+              <CodeMirror
+                value={code}
+                height="auto"
+                // height="100vh"
+                width="55vw"
+                extensions={StreamLanguage.define(language)}
+                onChange={(value, viewUpdate) => {
+                  console.log('value:', value);
+                  setCodeField(value);
+                }}
+              />
+              <button onClick={handleSave} style = {{color:'white'}}>SAVE</button>
+            </div>
+
           </div>
         </div>
 

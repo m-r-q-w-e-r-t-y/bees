@@ -1,10 +1,11 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import User from './User.png'
 import Lock from './lock.png'
 import LoginButton from './LoginButton.png'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import './changePassword.css'
 
 function ChangePasswordForm() {
 
@@ -48,44 +49,50 @@ function ChangePasswordForm() {
 
     }
 
+    useEffect(() => {
+        document.body.classList.add('accountForm')
+    });
+
     return (
-        <form onSubmit={handleSubmit}>
-            <div className='changepassword'>
-                <label>Change Password</label>
-            </div>
-            <div className="txtfields">
-                <label className="email">
-                    <input type="text" placeholder='Code' id='token' name='token' className='emailfield' onChange={(event) => setToken(event.target.value)}/>
-                </label><br></br>
-                <label className="password">
-                    <input type={passwordShown ? "text" : "password"} placeholder='New password' id='password' name='password' onChange={(event) => setPassword(event.target.value)}/>
-                </label><br></br>
-                <label className="confirmpassword">
-                    <input type={passwordShown ? "text" : "password"} placeholder='Confirm new password' id='confirmPassword' name='confirmPassword' onChange={(event) => setConfirmPassword(event.target.value)}/>
-                </label>
-                <div className='userregister'>
-                    <img src={User} />
+        <div className="accountForm">
+            <form onSubmit={handleSubmit}>
+                <div className='changepassword'>
+                    <label>Change Password</label>
                 </div>
-                <div className='lockregister1'>
-                    <img src={Lock} />
-                </div>
-                <div className='lockregister2'>
-                    <img src={Lock} />
-                </div>
-            </div>
-            <div className='loginbutton'>
-                <button>
-                    <img src={LoginButton} />
-                </button>
-            </div>
-            <div className='redirectback'>
-                <Link to="/login">
-                    <label className='logintxt'>
-                        Remember password?
+                <div className="txtfields">
+                    <label className="email">
+                        <input type="text" placeholder='Code' id='token' name='token' className='emailfield' onChange={(event) => setToken(event.target.value)}/>
+                    </label><br></br>
+                    <label className="password">
+                        <input type={passwordShown ? "text" : "password"} placeholder='New password' id='password' className='inputPassword' name='password' onChange={(event) => setPassword(event.target.value)}/>
+                    </label><br></br>
+                    <label className="confirmpassword">
+                        <input type={passwordShown ? "text" : "password"} placeholder='Confirm new password' id='confirmPassword' name='confirmPassword' onChange={(event) => setConfirmPassword(event.target.value)}/>
                     </label>
-                </Link>
-            </div>
-        </form>
+                    <div className='userregister'>
+                        <img src={User} />
+                    </div>
+                    <div className='lockregister1'>
+                        <img src={Lock} />
+                    </div>
+                    <div className='lockregister2'>
+                        <img src={Lock} />
+                    </div>
+                </div>
+                <div className='loginbutton'>
+                    <button className='imgButton'>
+                        <img src={LoginButton} />
+                    </button>
+                </div>
+                <div className='redirectback'>
+                    <Link to="/login">
+                        <label className='logintxt'>
+                            Remember password?
+                        </label>
+                    </Link>
+                </div>
+            </form>
+        </div>
     )
 }
 

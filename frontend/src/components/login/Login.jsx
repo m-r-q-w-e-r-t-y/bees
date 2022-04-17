@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import User from './User.png'
 import Lock from './lock.png'
@@ -9,6 +9,7 @@ import AppleButton from './AppleID.png'
 import FacebookButton from './Facebook.png'
 import { Link, use } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import './login.css'
 
 function LoginForm() {
 
@@ -37,6 +38,7 @@ function LoginForm() {
         .then( (data) => {
             // Go to another page in React
             if (data.success) {
+                console.log(JSON.stringify(email));
                 navigate('/folder')
             }
             else {
@@ -46,8 +48,12 @@ function LoginForm() {
         .catch( (error) => console.log(error))
     }
 
+    useEffect(() => {
+        document.body.classList.add('accountForm')
+    });
+
     return (
-        <div>
+        <div className="accountForm">
             <form onSubmit={handleSubmit}>
                 <div className='signin'>
                     <label>Sign In</label>
@@ -57,7 +63,7 @@ function LoginForm() {
                         <input name="email" type="text" placeholder='Username or Email Address' id='email' className='emailfield' value={email} onChange={ (event) => setEmail(event.target.value) }/>
                     </label><br></br>
                     <label className="password">
-                        <input name="password" type="password" placeholder='Password' id='password' value={password} onChange={ (event) => setPassword(event.target.value) } />
+                        <input name="password" type="password" placeholder='Password' id='password' className='inputPassword' value={password} onChange={ (event) => setPassword(event.target.value) } />
                     </label>
                     <div className='user'>
                         <img src={User} />
@@ -67,7 +73,7 @@ function LoginForm() {
                     </div>
                 </div>
                 <div className='loginbutton'>
-                <button>
+                <button className="imgButton">
                         <img src={LoginButton} />
                     </button>
                 </div>
@@ -89,13 +95,13 @@ function LoginForm() {
             </form>
             <form action="http://localhost:5000/" method="POST">
                 <div className='threebuttons'>
-                    <button className='googlebutton'>
+                    <button className='googlebutton imgButton'>
                         <img src={GoogleButton} />
                     </button>
-                    <button className='applebutton'>
+                    <button className='applebutton imgButton'>
                         <img src={AppleButton} />
                     </button>
-                    <button className='facebookbutton'>
+                    <button className='facebookbutton imgButton'>
                         <img src={FacebookButton} />
                     </button>
                 </div>

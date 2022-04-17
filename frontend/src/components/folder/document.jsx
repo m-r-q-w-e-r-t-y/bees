@@ -1,56 +1,76 @@
-import React, {Component } from 'react';
+import React from "react";
+import { Component } from "react";
+import Menu from "./menu";
+import "./folder.css"
+import RenameDocument from "./renameDocument";
 
 class Document extends Component {
-    state = { 
-        name:"CSE 442"
-      }
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            showMenu: false,
+            renaming: false
+        }
+        this.handleMenuClick = this.handleMenuClick.bind(this)
+        this.cancelNaming = this.cancelNaming.bind(this)
+        this.startNaming = this.startNaming.bind(this)
+    }
     
-    documentStyle = {
-        display:"flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "200px",
-        width: "160px",
-        margin: "20px 20px 20px 20px"
+    renderRenameForm(){
+        if(this.state.renaming == true){
+            return(
+                <RenameDocument 
+                    documentName = {this.props.name}
+                    cancelHandler = {this.cancelNaming}
+                    renameHandler = {this.props.renameHandler} 
+                    
+                ></RenameDocument>   
+            )
+        }
     }
-    cardStyle = {
-        display:"flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "220px",
-        width: "150px",
-        backgroundColor: "white",
-        boxShadow: "0px 4px 30px rgba(0, 0, 0, 0.25)",
-        margin: "48px 24px 48px 24px",
-        padding: "32px 4px 24px 4px"
+
+    renderDropdownMenu(){
+        if(this.state.showMenu === true){
+            return (
+                <Menu 
+                    startNamingHandler = {this.startNaming}
+                ></Menu>
+            )
+        }
     }
-    hamburgerStyle = {
-        alignSelf: "flex-end",
-        width: "1.3rem",
-        height: "1.3rem"
+
+    startNaming(){
+        this.setState({
+            renaming:true
+        })
     }
-    nameStyle = {
-       fontSize: "28px",
-       fontWeight: 700,
-       lineHeight: "16px"
+    cancelNaming(){
+        this.setState({
+            renaming:false
+        })
     }
-    imageStyle = {
-        width: "120px",
-        height: "120px"
+
+    handleMenuClick(){
+        this.setState({
+            showMenu: !this.state.showMenu
+        })
     }
     render() { 
         return (
-            <div className = "document" style={this.documentStyle}>
-                <div className = "card" style={this.cardStyle}>  
-                    <img src={require("./file.svg")} alt="document image" style={this.imageStyle}  />
-                    <img style = {this.hamburgerStyle} src={require("./hamburger.svg")} alt="" />
+            <div className = "document">
+                <div className = "documentCard" >  
+                    <img src={require("./file.png")} className = "documentImage" alt="document image"  />
+                    <img  src={require("./hamburger.png")} className = "documentHamburger" onClick = {this.handleMenuClick} alt="" />
+ 
                 </div>
-                <h1 style = {this.nameStyle}>{this.state.name}</h1>
+                    {this.renderDropdownMenu()}
+                    {this.renderRenameForm()}
+                <h1 className="documentName"> {this.props.name} </h1>
+
             </div>
         );
     }
 }
- 
+
 export default Document;

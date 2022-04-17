@@ -1,12 +1,13 @@
-import React from 'react'
-import { Route, Routes } from 'react-router-dom'
-import Login from './components/login/Login'
-import Register from './components/register/Register'
-import ForgetPassword from './components/forgetPassword/ForgetPassword'
-import ChangePassword from './components/changePassword/ChangePassword'
-import Folder from './components/folder/Folder'
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import Login from "./components/login/Login";
+import Register from "./components/register/Register";
+import ForgetPassword from "./components/forgetPassword/ForgetPassword";
+import ChangePassword from "./components/changePassword/ChangePassword";
+import Folder from "./components/folder/Folder";
 import NavBar from "./components/navBar/NavBar";
-import Note from './components/note/Note'
+import Note from "./components/note/Note";
+import NoteViewOnly from "./components/noteViewOnly/NoteViewOnly";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/reset" element={<ChangePassword></ChangePassword>} />
         <Route path="/folder" element={<Folder></Folder>} />
         <Route path="/note" element={<Note></Note>} />
+        <Route path="/noteviewpage" element={<NoteViewOnly></NoteViewOnly>} />
       </Routes>
     </div>
   );
