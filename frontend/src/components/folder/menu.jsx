@@ -4,19 +4,20 @@ import "./folder.css"
 import RenameDocument from "./renameDocument";
 
 class Menu extends Component {
-
-    rename(){
-        //Need to pass the name of the document that was clicked to menu
-        //Need to go into folder page's state.documents and find the index of doucment matching name
-        //Need to update that index.
+    constructor(props) {
+        super(props);
+        this.handleRemove = this.handleRemove.bind(this);
+      }
+    handleRemove(event){
+        this.props.removeHandler(this.props.documentName);
+        event.preventDefault();
     }
-
     render() { 
         return (
             <ul className="menuList">
                 <li className="menuItem" onClick={this.props.startNamingHandler}>Rename</li>
-                <li className="menuItem">Open</li>
-                <li className="menuItem">Remove</li>
+                <a  href = "http://localhost:3000/noteviewpage" className="menuItem">Open</a>
+                <li className="menuItem" onClick={this.handleRemove}>Remove</li>
                 <li className="menuItem">Share</li>
             </ul>
         );

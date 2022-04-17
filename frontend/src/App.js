@@ -13,7 +13,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header"></header>
-      <NavBar />
+      
       <Routes>
         <Route path="*" element={<Login></Login>} />
         <Route path="/register" element={<Register></Register>} />
