@@ -59,7 +59,7 @@ const Note = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: "4231243@gmail.com", filename: "test", code: code })
     };
-    fetch("http://localhost:5000/note", requestOptions)
+    fetch(process.env.REACT_APP_API + "/note", requestOptions)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -75,7 +75,7 @@ const Note = () => {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     };
-    fetch("http://localhost:5000/note", requestOptions)
+    fetch(process.env.REACT_APP_API + "/note", requestOptions)
       .then(res => res.json())
       .then(
         result => {

@@ -53,7 +53,7 @@ const Comment = ({length, newCommentHeight, allComments}) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: "4231243@gmail.com", commentId: commentid.value, comments: [{ height: parseFloat(height.value), title: title.value, input: input.value}]})
     };
-    fetch("http://localhost:5000/comment", requestOptions)
+    fetch(process.env.REACT_APP_API + "/comment", requestOptions)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -105,7 +105,7 @@ const Comment = ({length, newCommentHeight, allComments}) => {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       };
-      fetch("http://localhost:5000/comment", requestOptions)
+      fetch(process.env.REACT_APP_API + "/comment", requestOptions)
         .then(res => res.json())
         .then(
           result => {
