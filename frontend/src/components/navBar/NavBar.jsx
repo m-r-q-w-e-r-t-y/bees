@@ -1,38 +1,38 @@
 import React, { Component } from "react";
 import "./navbar.css";
-import { Link, use } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export default class NavBar extends Component {
-  render() {
-    return (
-      <div className="Navbar">
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        ></link>{" "}
-        <div className="leftSide">
-          <Link to="/folder">
-            <div className="dreamworktitle">CODEHUB</div>
-          </Link>
-          <div className="search-box">
-            <input
-              className="searchBar"
-              type="text"
-              placeholder=" Search for projects, teammates..."
-            />
-            <button className="fa fa-search"></button>
-          </div>
+const NavBar = ({delToken}) => {
+  return (
+    <div className="Navbar">
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      ></link>{" "}
+      <div className="leftSide">
+        <Link to="/folder">
+          <div className="dreamworktitle">CODEHUB</div>
+        </Link>
+        <div className="search-box">
+          <input
+            className="searchBar"
+            type="text"
+            placeholder=" Search for projects, teammates..."
+          />
+          <button className="fa fa-search"></button>
         </div>
-        <div className="rightSide">
-          <div className="dropdown">
-            <button className="dropbtn">≡</button>
-            <div className="dropdown-content">
-              <a href="#">Setting</a>
-              <a href="#">Log out</a>
-            </div>
+      </div>
+      <div className="rightSide">
+        <div className="dropdown">
+          <button className="dropbtn">≡</button>
+          <div className="dropdown-content">
+            <Link to="/folder">Setting</Link>
+            <Link to="/login" onClick={ () => { delToken() } }>Log out</Link>
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
+
+export default NavBar;

@@ -8,15 +8,29 @@ import Folder from "./components/folder/Folder";
 import NavBar from "./components/navBar/NavBar";
 import Note from "./components/note/Note";
 import NoteViewOnly from "./components/noteViewOnly/NoteViewOnly";
+import useToken from "./customHook/useToken";
 
 function App() {
+
+  const { token, setToken, delToken} = useToken();
+
+  if (!token) {
+    return (
+      <Routes>
+        <Route path="*" element={<Login setToken={setToken}></Login>} />
+        <Route path="/register" element={<Register setToken={setToken}></Register>} />
+        <Route path="/forgot" element={<ForgetPassword></ForgetPassword>} />
+        <Route path="/reset" element={<ChangePassword></ChangePassword>} />
+      </Routes>
+    )
+  }
+
   return (
     <div className="App">
       <header className="App-header"></header>
-      <NavBar />
+      <NavBar delToken={delToken}/>
       <Routes>
         <Route path="*" element={<Login></Login>} />
-        <Route path="/register" element={<Register></Register>} />
         <Route path="/forgot" element={<ForgetPassword></ForgetPassword>} />
         <Route path="/reset" element={<ChangePassword></ChangePassword>} />
         <Route path="/folder" element={<Folder></Folder>} />
