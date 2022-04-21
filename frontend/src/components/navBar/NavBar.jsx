@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./navbar.css";
+import { Link, use } from "react-router-dom";
 
 export default class NavBar extends Component {
   render() {
@@ -10,7 +11,9 @@ export default class NavBar extends Component {
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         ></link>{" "}
         <div className="leftSide">
-          <div className="dreamworktitle">CODEHUB</div>
+          <Link to="/folder">
+            <div className="dreamworktitle">CODEHUB</div>
+          </Link>
           <div className="search-box">
             <input
               className="searchBar"
