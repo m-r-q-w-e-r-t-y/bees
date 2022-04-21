@@ -229,14 +229,21 @@ const noteUser = asyncHandler(async (req, res) => {
 });
 
 const commentUser = asyncHandler(async (req, res) => {
-  const { email, commentId, comments } = req.body;
+  const { email, commentId, removeComment, comments } = req.body;
   const filter = { email: email };
   const ObjectId = mongoose.Types.ObjectId;
   const found = await Files.findOne({comments:{$elemMatch:{_id: ObjectId(commentId)}}});
-  if(found){
+  if(found && !removeComment){
     await Files.updateOne(
       {comments:{$elemMatch:{_id: ObjectId(commentId)}}},
       {$set : {"comments.$.title" : comments[0].title, "comments.$.input" : comments[0].input}
+    })
+  }
+  else if(removeComment){
+    await Files.updateMany(
+      { },
+      //try adding comments to POST maybe
+      {$pull : { comments: { $elemMatch: {_id: ObjectId(commentId)} } }
     })
   }
   else{

@@ -57,9 +57,9 @@ const Note = () => {
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: "4231243@gmail.com", filename: "test", code: code })
+      body: JSON.stringify({ email: "savedcomments1@gmail.com", filename: "test", code: code })
     };
-    fetch(process.env.REACT_APP_API + "/note", requestOptions)
+    fetch("http://localhost:5000/note", requestOptions)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -75,16 +75,16 @@ const Note = () => {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     };
-    fetch(process.env.REACT_APP_API + "/note", requestOptions)
+    fetch("http://localhost:5000/note", requestOptions)
       .then(res => res.json())
       .then(
         result => {
-          if(result[0].comments.length > 0){
-            setSavedComments(result[0].comments);
+          if(result[13].comments.length > 0){
+            setSavedComments(result[13].comments);
             console.log("getComments"+savedComments);
-            setCommentHeight(result[0].comments[0].height);
+            setCommentHeight(result[13].comments[0].height);
           }
-          setCodeField(result[0].code);
+          setCodeField(result[13].code);
           setCount(count+1);
         },
       )
