@@ -92,12 +92,8 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    res.status(200);
-    // res.status(201).json({
-    //   _id: user.id,
-    //   name: user.name,
-    //   email: user.email,
-    // });
+    const token = generateToken(user._id);
+    res.status(200).json({success: true, jwt: token});
   } else {
     res.status(400);
     throw new Error("Invalid user data");
@@ -113,14 +109,10 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await bcrypt.compare(password, user.password))) {
-    // res.json({
-    //   _id: user.id,
-    //   name: user.name,
-    //   email: user.email,
-    // });
-    res.status(200).json({success: true})
+    const token = generateToken(user._id);
+    res.status(200).json({success: true, jwt: token});
   } else {
-    res.status(200).json({success: false})
+    res.status(200).json({success: false});
     throw new Error("Invalid credentials");
   }
 });
@@ -296,3 +288,6 @@ transporter.sendMail(mailOptions, function (err, info) {
   }
 })
 
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })
+};

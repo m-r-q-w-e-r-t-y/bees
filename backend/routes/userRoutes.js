@@ -17,6 +17,7 @@ const {
   commentPage,
 } = require("../controllers/userController");
 
+const { protect } = require("../middleware/authMiddleware");
 
 router.route("/login").get(loginPage).post(loginUser);
 router.route("/register").get(registerPage).post(registerUser);

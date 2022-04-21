@@ -11,7 +11,7 @@ import { Link, use } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import './login.css'
 
-function LoginForm() {
+function LoginForm({ setToken }) {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
@@ -38,7 +38,7 @@ function LoginForm() {
         .then( (data) => {
             // Go to another page in React
             if (data.success) {
-                console.log(JSON.stringify(email));
+                setToken(data.jwt);
                 navigate('/folder')
             }
             else {

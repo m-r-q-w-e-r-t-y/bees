@@ -9,7 +9,7 @@ import FacebookButton from './Facebook.png'
 import { Link, useNavigate } from 'react-router-dom'
 import './register.css'
 
-function RegisterForm() {
+function RegisterForm({ setToken }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
@@ -36,7 +36,8 @@ function RegisterForm() {
         .then( (data) => {
             // Go to another page in React
             if (data.success) {
-                navigate('/login')
+                setToken(data.jwt);
+                navigate('/folder')
             }
             else {
                 alert('Email already in use')
