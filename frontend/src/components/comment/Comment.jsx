@@ -108,7 +108,10 @@ const Comment = ({length, newCommentHeight, allComments}) => {
 
   const handleDelete = () => {
     console.log("You have clicked the delete button");
-    const commentid = document.getElementById("commentid" + length);
+    const title = document.getElementById("titleInput"+length);
+    const input = document.getElementById("input"+length);
+    const height = document.getElementById("height"+length);
+    const commentid = document.getElementById("commentid"+length);
     if (!commentid.value) {
       commentid.value = "000000000000000000000000"
     }
@@ -117,7 +120,7 @@ const Comment = ({length, newCommentHeight, allComments}) => {
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: "savedcomments1@gmail.com", commentId: commentid.value, removeComment: true })
+      body: JSON.stringify({ email: "savedcomments1@gmail.com", commentId: commentid.value, removeComment: true, comments: [{ height: parseFloat(height.value), title: title.value, input: input.value}]})
     };
     fetch("http://localhost:5000/comment", requestOptions)
       .then((response) => {

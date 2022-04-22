@@ -240,10 +240,14 @@ const commentUser = asyncHandler(async (req, res) => {
     })
   }
   else if(removeComment){
-    await Files.updateMany(
-      { },
-      //try adding comments to POST maybe
-      {$pull : { comments: { $elemMatch: {_id: ObjectId(commentId)} } }
+    await Files.findOneAndUpdate(filter, 
+      { $pull: { 
+        comments: {
+          height : comments[0].height,
+          title : comments[0].title,
+          input: comments[0].input
+          }  
+      } 
     })
   }
   else{
