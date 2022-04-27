@@ -17,9 +17,28 @@ class Folder extends Component {
         this.renameDocument = this.renameDocument.bind(this);
     }
     state = {  
-        documents: ["test"],
+        documents: [],
         renaming: "false"
     };
+
+    componentDidMount() {
+        const token = localStorage.getItem("token");
+        fetch(process.env.REACT_APP_API + "/notes", {
+            method: "GET",
+            headers: { authorization: `Bearer ${token}` }
+        })
+        .then(res => {
+            return res.json();
+        })
+        .then(data => {
+            this.setState({
+                documents: data
+            })
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
 
     prependDocument(name){
         this.setState(this.state.documents.unshift({name})) // this is going into this.state -> documents -> {prepending a document}. 
@@ -37,19 +56,49 @@ class Folder extends Component {
     }
 
     addDocument(documentName){
-        this.setState({
-            documents: this.state.documents.concat([documentName])
+        const token = localStorage.getItem("token");
+
+        fetch(process.env.REACT_APP_API + "/notes", {
+            method: "POST",
+            headers: { 
+                authorization : `Bearer ${token}`,
+                'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify({ filename: documentName })
         })
+        .then(res => {
+            return res.json();
+        })
+        .then(data => {
+            this.setState({
+                documents: this.state.documents.concat([data])
+            })
+        })
+        .catch(error => {
+            console.log(error);
+        });
     }
 
 
     renameDocument(oldName, newName){
         if(this.state.documents.includes(oldName)){
-            let index = this.state.documents.indexOf(oldName);
-            this.state.documents[index] = newName;
-            this.setState({
-                documents: this.state.documents 
-            })
+            const index = this.state.documents.indexOf(oldName);
+            const id = this.state.documents[index].id;
+            // fetch(process.env.REACT_APP_API + "/notes/"
+
+            // )
+            // .then(
+
+            // )
+            // .then(
+
+            // )
+            // .catch()
+
+            // this.state.documents[index] = newName;
+            // this.setState({
+            //     documents: this.state.documents 
+            // })
         }
     }
     renderDocuments(){
@@ -61,7 +110,7 @@ class Folder extends Component {
         else{
             return(
                 <>
-                    {this.state.documents.map(document => (<Document renameHandler = {this.renameDocument} name={document}> </Document>) )}
+                    { this.state.documents.map( (document, i) => (<Document key={i} renameHandler = {this.renameDocument} name={document.filename} noteId={document._id}> </Document>) )}
                     <CreateDocumentCircle handler = {this.createDocumentHandler}></CreateDocumentCircle>
                 </>
             )
@@ -73,6 +122,7 @@ class Folder extends Component {
             return <NameNewDocument cancelHandler = {this.cancelNaming} addDocumentHandler = {this.addDocument}></NameNewDocument>
         }
     }
+
     render() { 
         return (
             <div className = "folder" >
