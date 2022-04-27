@@ -55,11 +55,11 @@ class Document extends Component {
     return (
       <div className="document">
         <div className="documentCard">
-          <Link to="/note">
+          <Link to={`/note/${this.props.noteId}`}>
             <img
               src={require("./file.png")}
               className="documentImage"
-              alt="document image"
+              alt="document img"
             />
           </Link>
           <img

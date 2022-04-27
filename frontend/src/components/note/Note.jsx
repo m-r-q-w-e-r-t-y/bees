@@ -15,6 +15,7 @@ import "./note.css";
 import { Link, use } from "react-router-dom";
 
 const Note = () => {
+  
   // Variables for highlighting page
   const [commentButtonPoint, setCommentButtonPoint] = useState({ x: 0, y: 0 }); // Tells Comment button where to position
   const [commentHover, setCommentHover] = useState(false); // Shows Comment button on true. Removes in false
@@ -53,16 +54,17 @@ const Note = () => {
   const handleSave = (event) => {
     console.log(code);
     event.preventDefault();
+    const token = localStorage.getItem("token");
+    const url = window.location.pathname;
+    const id = url.split("/")[2];
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", authorization: `Bearer ${token}`  },
       body: JSON.stringify({
-        email: "4231243@gmail.com",
-        filename: "test",
         code: code,
       }),
     };
-    fetch(process.env.REACT_APP_API + "/note", requestOptions)
+    fetch(process.env.REACT_APP_API + "/note/" + id, requestOptions)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -74,21 +76,26 @@ const Note = () => {
 
   //Get code from database
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    const url = window.location.pathname;
+    const id = url.split("/")[2];
     const requestOptions = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", authorization: `Bearer ${token}`  },
     };
-    fetch(process.env.REACT_APP_API + "/note", requestOptions)
-      .then((res) => res.json())
-      .then((result) => {
-        if (result[0].comments.length > 0) {
-          setSavedComments(result[0].comments);
-          console.log("getComments" + savedComments);
-          setCommentHeight(result[0].comments[0].height);
-        }
-        setCodeField(result[0].code);
-        setCount(count + 1);
-      });
+
+    fetch(process.env.REACT_APP_API + "/note/" + id, requestOptions)
+    .then((res) => res.json())
+    .then((result) => {
+      if (result.comments.length > 0) {
+        setSavedComments(result.comments);
+        //console.log("getComments" + savedComments);
+        console.log(result);
+        setCommentHeight(result.comments.height);
+      }
+      setCodeField(result.code);
+      setCount(count + 1);
+    });
   }, []);
 
   useEffect(() => {

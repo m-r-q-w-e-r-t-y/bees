@@ -47,21 +47,6 @@ const Comment = ({length, newCommentHeight, allComments}) => {
     if(!commentid.value){
       commentid.value = "000000000000000000000000"
     }
-    
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: "4231243@gmail.com", commentId: commentid.value, comments: [{ height: parseFloat(height.value), title: title.value, input: input.value}]})
-    };
-    fetch(process.env.REACT_APP_API + "/comment", requestOptions)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Something went wrong');
-      })
-      .catch((error) => console.log(error))
-
 
     // If clicking on Edit button, make the Comment component editable
     if (type === "Edit") {
@@ -82,6 +67,25 @@ const Comment = ({length, newCommentHeight, allComments}) => {
         title.setAttribute("readonly", true);
         input.setAttribute("readonly", true);
 
+        const token = localStorage.getItem("token");
+        const url = window.location.pathname;
+        const id = url.split("/")[2];
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', authorization: `Bearer ${token}`  },
+          body: JSON.stringify({ commentId: commentid.value, comments: [{ height: parseFloat(height.value), title: title.value, input: input.value}]})
+        };
+
+        fetch(process.env.REACT_APP_API + "/comment/" + id, requestOptions)
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Something went wrong');
+          })
+          .catch((error) => console.log(error))
+    
+
         setTitleError(false);
         setInputError(false);
         setType("Edit");
@@ -101,24 +105,27 @@ const Comment = ({length, newCommentHeight, allComments}) => {
     //Get code from database
     useEffect(() => {
       console.log("HITS");
+      const token = localStorage.getItem("token");
+      const url = window.location.pathname;
+      const id = url.split("/")[2];
       const requestOptions = {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', authorization: `Bearer ${token}`  },
       };
-      fetch(process.env.REACT_APP_API + "/comment", requestOptions)
+      fetch(process.env.REACT_APP_API + "/comment/" + id, requestOptions)
         .then(res => res.json())
         .then(
           result => {
-            setSavedComments(result[0].comments);
-            if(result[0].comments[length-1].title !== undefined){
+            setSavedComments(result.comments);
+            if(result.comments[length-1].title !== undefined){
               const title = document.getElementById("titleInput"+length);
               const input = document.getElementById("input"+length);
               const height = document.getElementById("height"+length);
               const commentid = document.getElementById("commentid"+length);
-              title.value = result[0].comments[length-1].title;
-              input.value = result[0].comments[length-1].input;
-              height.value = result[0].comments[length-1].height;
-              commentid.value = result[0].comments[length-1]._id;
+              title.value = result.comments[length-1].title;
+              input.value = result.comments[length-1].input;
+              height.value = result.comments[length-1].height;
+              commentid.value = result.comments[length-1]._id;
               title.setAttribute("readonly", true);
               input.setAttribute("readonly", true);
               setTitleError(false);
@@ -127,6 +134,7 @@ const Comment = ({length, newCommentHeight, allComments}) => {
             }
           },
         )
+        .catch(error => console.log(error));
     }, []);
 
   return (

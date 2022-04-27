@@ -8,14 +8,12 @@ const useToken = () => {
     }
 
     const save = (token) => {
-      localStorage.setItem("token", token);
-      setToken(token);  
+        localStorage.setItem("token", token);
+        setToken(token);  
     };
 
     const del = () => {
-        console.log(localStorage.getItem("token"));
         localStorage.removeItem("token");
-        console.log(localStorage.getItem("token"));
         setToken();
     };
 

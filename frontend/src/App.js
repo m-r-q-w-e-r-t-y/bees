@@ -18,6 +18,7 @@ function App() {
     return (
       <Routes>
         <Route path="*" element={<Login setToken={setToken}></Login>} />
+        <Route path="/login" element={<Login setToken={setToken}></Login>} />
         <Route path="/register" element={<Register setToken={setToken}></Register>} />
         <Route path="/forgot" element={<ForgetPassword></ForgetPassword>} />
         <Route path="/reset" element={<ChangePassword></ChangePassword>} />
@@ -30,11 +31,12 @@ function App() {
       <header className="App-header"></header>
       <NavBar delToken={delToken}/>
       <Routes>
-        <Route path="*" element={<Login></Login>} />
+        <Route path="/login" element={<Folder></Folder>} />
         <Route path="/forgot" element={<ForgetPassword></ForgetPassword>} />
         <Route path="/reset" element={<ChangePassword></ChangePassword>} />
+        <Route path="/" element={<Folder></Folder>} />
         <Route path="/folder" element={<Folder></Folder>} />
-        <Route path="/note" element={<Note></Note>} />
+        <Route path="/note/*" element={<Note></Note>} />
         <Route path="/noteviewpage" element={<NoteViewOnly></NoteViewOnly>} />
       </Routes>
     </div>
