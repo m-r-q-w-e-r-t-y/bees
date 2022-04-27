@@ -35,16 +35,19 @@ const resetPage = (req, res) => {
 
 // @desc    Get note page
 // @route   GET /note
-// @access  Public
+// @access  Private
 const notePage = async (req, res) => {
-  const notes = await Files.find();
-
+  const id = req.params.id;
+  const notes = await Files.findById(id);
   res.status(200).json(notes);
 };
 
+// @desc    Get comments from a note
+// @route   GET /comment/:id
+// @access  Private
 const commentPage = async (req, res) => {
-  const comments = await Files.find();
-
+  const noteId = req.params.id;
+  const comments = await Files.findById(noteId);
   res.status(200).json(comments);
 };
 
@@ -199,16 +202,17 @@ const resetUser = asyncHandler(async (req, res) => {
 });
 
 // @desc    Save note
-// @route   POST /note
-// @access  Public
+// @route   POST /note/:id
+// @access  Private
 const noteUser = asyncHandler(async (req, res) => {
 
-  const { email, filename, code } = req.body;
+  const noteId = req.params.id;
+  const { code } = req.body;
 
-  const filter = { email: email };
+  const id = { _id: noteId};
   const update = { code: code };
 
-  const fileExists = await Files.findOneAndUpdate(filter, update);
+  const fileExists = await Files.findOneAndUpdate(id, update);
   if(!fileExists){
     throw new Error(`Invalid Code\n`);
   }
@@ -220,9 +224,13 @@ const noteUser = asyncHandler(async (req, res) => {
 
 });
 
+// @desc    Save comment
+// @route   POST /comment/:id
+// @route   Private
 const commentUser = asyncHandler(async (req, res) => {
-  const { email, commentId, comments } = req.body;
-  const filter = { email: email };
+  const noteId = req.params.id;
+  const { commentId, comments } = req.body;
+  const filter = { _id: noteId };
   const ObjectId = mongoose.Types.ObjectId;
   const found = await Files.findOne({comments:{$elemMatch:{_id: ObjectId(commentId)}}});
   if(found){
@@ -244,9 +252,57 @@ const commentUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Gets all notes given user id
+// @route   GET /notes
+// @access  Private
+const getNotes = asyncHandler(async (req, res) => {
+  const notes = await Files.find({ user: req.user.id });
+  res.status(200).json(notes);
+});
+
+
+// @desc Updates one note given note id
+// @route GET /notes/:id
+// @access Private
+const renameNote = asyncHandler(async (req, res) => {
+  const note = await File.findById(req.params.id);
+
+  if (!note) {
+    res.status(400);
+    throw new Error("Note not found");
+  }
+
+  const { newName } = req.body;
+  const id = { _id: req.params.id };
+  const filename = { filename : newName};
+  const updatedNote = await File.findOneAndUpdate(id, filename);
+
+  res.status(200).json(updatedNote);
+});
+
+// @desc    Creates new note
+// @route   POST /postNotes
+// @access  Private
+const postNotes = asyncHandler(async (req, res) => {
+  const { filename } = req.body;
+  const file = await Files.create({
+    user: req.user.id,
+    email: req.user.email,
+    filename: filename,
+    code: "",
+  });
+
+  if (file) {
+    res.status(200).json(file);
+  } else {
+    res.status(400);
+    throw new Error("Invalid user data");
+  }
+});
+
+
 module.exports = {
   loginPage,
-  //   authenticateUser,
   registerPage,
   registerUser,
   loginUser,
@@ -257,7 +313,10 @@ module.exports = {
   noteUser,
   notePage,
   commentUser,
-  commentPage
+  commentPage,
+  getNotes,
+  postNotes,
+  renameNote
 };
 
 
