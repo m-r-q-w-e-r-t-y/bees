@@ -267,10 +267,12 @@ const Note = () => {
 
   return (
     <div className="App">
+      <link rel="stylesheet" href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       <header className="App-header">
         <div>
           <h1>This is title</h1>
           <p>This is the description</p>
+          <Link to={`/note/view/${window.location.pathname.split("/")[2]}`}>See the view page of this note</Link>
         </div>
         <Link to="/noteviewpage">
           <div className="viewButton" onClick={handleViewButton}>
@@ -295,8 +297,23 @@ const Note = () => {
                 </select>
               </div>
               {commentHover ? (
-                <button
-                  id="comment"
+
+                <>
+                {/* // <button
+                //   id="comment"
+                //   style={{
+                //     position: "absolute",
+                //     display: "inline-block",
+                //     left: commentButtonPoint.x,
+                //     top: commentButtonPoint.y,
+                //   }}
+                //   onClick={addComment}
+                // >
+                //   Click
+                // </button> */}
+
+
+              <span className="material-symbols-outlined" id="comment"
                   style={{
                     position: "absolute",
                     display: "inline-block",
@@ -304,9 +321,9 @@ const Note = () => {
                     top: commentButtonPoint.y,
                   }}
                   onClick={addComment}
-                >
-                  Click
-                </button>
+                
+              >library_add</span>
+              </>
               ) : (
                 <></>
               )}

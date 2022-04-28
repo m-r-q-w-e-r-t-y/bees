@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import styles from "./comment.module.css";
+import styles from "./commentView.module.css";
 
-const Comment = ({length, newCommentHeight, allComments}) => {
+const CommentView = ({length, newCommentHeight, allComments}) => {
   const [text, setText] = useState("");
   const [titleError, setTitleError] = useState(false);
   const [inputError, setInputError] = useState(false);
@@ -69,7 +69,7 @@ const Comment = ({length, newCommentHeight, allComments}) => {
 
         const token = localStorage.getItem("token");
         const url = window.location.pathname;
-        const id = url.split("/")[2];
+        const id = url.split("/")[3];
         const requestOptions = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', authorization: `Bearer ${token}`  },
@@ -107,7 +107,7 @@ const Comment = ({length, newCommentHeight, allComments}) => {
       console.log("HITS");
       const token = localStorage.getItem("token");
       const url = window.location.pathname;
-      const id = url.split("/")[2];
+      const id = url.split("/")[3];
       const requestOptions = {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', authorization: `Bearer ${token}`  },
@@ -138,57 +138,53 @@ const Comment = ({length, newCommentHeight, allComments}) => {
     }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <div className={styles.comment}>
-          <div className={styles.closeButton} onClick={handleDelete}>
-            <div className={styles.closeButtonChildren}></div>
-            <div className={styles.closeButtonLine1}></div>
-            <div className={styles.closeButtonLine2}></div>
-          </div>
-          {titleError ? (
-            <>
-              <span className="error">Please populate this field</span>
-            </>
-          ) : (
-            <></>
-          )}
-          <div className={styles.flexTitle}>
-            <textarea
-              id={"titleInput"+length}
-              type="text"
-              className={ `${styles.titleInput} ${styles.textareaInput}` }
-              onChange={calculateHeight}
-              placeholder="Title..."
-            />
-          </div>
-          {inputError ? (
-            <span className={styles.error}>Please populate this field</span>
-          ) : (
-            <></>
-          )}
-          <div className={styles.flexInput}>
-            <textarea
-              id={"input"+length}
-              type="text"
-              className={ `${styles.input} ${styles.textareaInput}` }
-              onChange={calculateHeight}
-              placeholder="Comment..."
-            />
-            <textarea
-              id={"height"+length}
-              className={styles.Hiddenvalueholder}
-            />
-            <textarea
-              id={"commentid"+length}
-              className={styles.Hiddenvalueholder}
-            />
-          </div>
-          <button onClick={handleSubmit}>{type}</button>
+      <div className={styles.comment}>
+        <div className={styles.closeButton} onClick={handleDelete}>
+          <div className={styles.closeButtonChildren}></div>
+          <div className={styles.closeButtonLine1}></div>
+          <div className={styles.closeButtonLine2}></div>
         </div>
-      </header>
-    </div>
+        {titleError ? (
+          <>
+            <span className={styles.error}>Please populate this field</span>
+          </>
+        ) : (
+          <></>
+        )}
+        <div className={styles.flexTitle}>
+          <textarea
+            id={"titleInput"+length}
+            type="text"
+            className={ `${styles.titleInput} ${styles.textareaInput}` }
+            onChange={calculateHeight}
+            placeholder="Title..."
+          />
+        </div>
+        {inputError ? (
+          <span className={styles.error}>Please populate this field</span>
+        ) : (
+          <></>
+        )}
+        <div className={styles.flexInput}>
+          <textarea
+            id={"input"+length}
+            type="text"
+            className={ `${styles.input} ${styles.textareaInput}` }
+            onChange={calculateHeight}
+            placeholder="Comment..."
+          />
+          <textarea
+            id={"height"+length}
+            className={styles.Hiddenvalueholder}
+          />
+          <textarea
+            id={"commentid"+length}
+            className={styles.Hiddenvalueholder}
+          />
+        </div>
+        {/* <button onClick={handleSubmit}>{type}</button> */}
+      </div>
   );
 };
 
-export default Comment;
+export default CommentView;

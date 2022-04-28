@@ -36,20 +36,30 @@ const resetPage = (req, res) => {
 // @desc    Get note page
 // @route   GET /note
 // @access  Private
-const notePage = async (req, res) => {
+const notePage = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const notes = await Files.findById(id);
   res.status(200).json(notes);
-};
+})
+
+// @desc    Get note page for view page
+// @route   GET /note/view/:id
+// @access  Private
+const notePageView = asyncHandler(async (req, res) => {
+  const { ObjectId } = mongoose.Types;
+  const id = ObjectId(req.params.id);
+  const note = await Files.findById("62674bdc4b8f4747426debaa");
+  res.status(200).json(note);
+});
 
 // @desc    Get comments from a note
 // @route   GET /comment/:id
 // @access  Private
-const commentPage = async (req, res) => {
+const commentPage = asyncHandler(async (req, res) => {
   const noteId = req.params.id;
   const comments = await Files.findById(noteId);
   res.status(200).json(comments);
-};
+});
 
 // @desc    Submit new user
 // @route   POST /register
@@ -262,9 +272,9 @@ const getNotes = asyncHandler(async (req, res) => {
 
 
 // @desc Updates one note given note id
-// @route GET /notes/:id
+// @route POST /notes/:id
 // @access Private
-const renameNote = asyncHandler(async (req, res) => {
+const renameNote = asyncHandler(async (req, res) => {;
   const note = await File.findById(req.params.id);
 
   if (!note) {
@@ -316,7 +326,8 @@ module.exports = {
   commentPage,
   getNotes,
   postNotes,
-  renameNote
+  renameNote,
+  notePageView
 };
 
 

@@ -3,7 +3,6 @@ const cors = require('cors')
 const dotenv = require('dotenv').config();
 const colors = require('colors');
 const connectMongo = require('./config/db');
-const { connect } = require('./routes/testroutes');
 
 
 connectMongo();
