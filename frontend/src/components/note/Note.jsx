@@ -63,6 +63,7 @@ const Note = () => {
     const url = window.location.pathname;
     const id = url.split("/")[2];
     const requestOptions = {
+
       method: "POST",
       headers: { "Content-Type": "application/json", authorization: `Bearer ${token}`  },
       body: JSON.stringify({

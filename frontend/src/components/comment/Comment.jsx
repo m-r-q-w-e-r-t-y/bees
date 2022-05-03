@@ -9,6 +9,7 @@ const Comment = ({length, newCommentHeight, allComments}) => {
   const [savedTitle, setSavedTitle] = useState("Comment");
   const [savedInput, setSavedInput] = useState("Comment");
   const [savedComments, setSavedComments ] = useState([]);
+  const [hidden, setHidden] = useState(false);
 
   // @desc
   // This makes the text area increase height automatically
@@ -39,13 +40,29 @@ const Comment = ({length, newCommentHeight, allComments}) => {
     const input = document.getElementById("input"+length);
     const height = document.getElementById("height"+length);
     const commentid = document.getElementById("commentid"+length);
-    console.log(commentid.value);
-    if(newCommentHeight !== undefined){
-      height.value = newCommentHeight;
-    }
+    if(type === "Comment"){
+      console.log(commentid.value);
+      if(newCommentHeight !== undefined){
+        height.value = newCommentHeight;
+      }
 
-    if(!commentid.value){
-      commentid.value = "000000000000000000000000"
+      if(!commentid.value){
+        commentid.value = "000000000000000000000000"
+      }
+      
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: "savedcomments1@gmail.com", commentId: commentid.value, removeComment: false, comments: [{ height: parseFloat(height.value), title: title.value, input: input.value}]})
+      };
+      fetch("http://localhost:5000/comment", requestOptions)
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('Something went wrong');
+        })
+        .catch((error) => console.log(error))
     }
 
     // If clicking on Edit button, make the Comment component editable
@@ -91,15 +108,47 @@ const Comment = ({length, newCommentHeight, allComments}) => {
         setType("Edit");
       }
     }
+    const requestOptions2 = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    };
+    fetch("http://localhost:5000/comment", requestOptions2)
+      .then(res => res.json())
+      .then(
+        result => {
+          setSavedComments(result[13].comments);
+          if(result[13].comments[length-1].title !== undefined){
+            const commentid = document.getElementById("commentid"+length);
+            commentid.value = result[13].comments[length-1]._id;
+          }
+        },
+      )
   };
 
   const handleDelete = () => {
     console.log("You have clicked the delete button");
+    const title = document.getElementById("titleInput"+length);
+    const input = document.getElementById("input"+length);
+    const height = document.getElementById("height"+length);
+    const commentid = document.getElementById("commentid"+length);
+    if (!commentid.value) {
+      commentid.value = "000000000000000000000000"
+    }
+    setHidden(true);
 
-    // implement functionality
-    // The following video gives an idea https://youtu.be/sjAeLwuezxo
-    // The will not delete comments but use 'filter' to remove from a database.
-    // In his implementation the comments show up after a call to the database
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: "savedcomments1@gmail.com", commentId: commentid.value, removeComment: true, comments: [{ height: parseFloat(height.value), title: title.value, input: input.value}]})
+    };
+    fetch("http://localhost:5000/comment", requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Something went wrong');
+      })
+      .catch((error) => console.log(error))
   };
 
     //Get code from database
@@ -112,6 +161,7 @@ const Comment = ({length, newCommentHeight, allComments}) => {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', authorization: `Bearer ${token}`  },
       };
+
       fetch(process.env.REACT_APP_API + "/comment/" + id, requestOptions)
         .then(res => res.json())
         .then(
@@ -139,6 +189,7 @@ const Comment = ({length, newCommentHeight, allComments}) => {
 
   return (
     <div className="App">
+      {!hidden ? 
       <header className="App-header">
         <div className={styles.comment}>
           <div className={styles.closeButton} onClick={handleDelete}>
@@ -187,6 +238,7 @@ const Comment = ({length, newCommentHeight, allComments}) => {
           <button className={styles.submitButton} onClick={handleSubmit}>{type}</button>
         </div>
       </header>
+      : null}
     </div>
   );
 };

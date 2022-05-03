@@ -24,6 +24,10 @@ const fileSchema = mongoose.Schema({
         type: String,
         required: [false, ''],
     },
+    removeComment: {
+        type: Boolean,
+        required: [false, ''],
+    },
     comments: [{
         height: {
             type: Number,
