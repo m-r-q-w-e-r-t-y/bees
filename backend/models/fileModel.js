@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 
 
 const fileSchema = mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User',
+    },
     email: {
         type: String,
         required: [true, 'Please add an email'],
@@ -13,7 +18,7 @@ const fileSchema = mongoose.Schema({
     },
     code: {
         type: "String",
-        require: [false, ''],
+        require: [true, ''],
     },
     commentId: {
         type: String,

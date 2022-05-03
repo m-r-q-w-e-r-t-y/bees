@@ -8,19 +8,35 @@ import Folder from "./components/folder/Folder";
 import NavBar from "./components/navBar/NavBar";
 import Note from "./components/note/Note";
 import NoteViewOnly from "./components/noteViewOnly/NoteViewOnly";
+import useToken from "./customHook/useToken";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header"></header>
-      <NavBar />
+  const { token, setToken, delToken } = useToken();
+
+  if (!token) {
+    return (
       <Routes>
-        <Route path="*" element={<Login></Login>} />
-        <Route path="/register" element={<Register></Register>} />
+        <Route path="*" element={<Login setToken={setToken}></Login>} />
+        <Route path="/login" element={<Login setToken={setToken}></Login>} />
+        <Route path="/register" element={<Register setToken={setToken}></Register>} />
         <Route path="/forgot" element={<ForgetPassword></ForgetPassword>} />
         <Route path="/reset" element={<ChangePassword></ChangePassword>} />
+      </Routes>
+    );
+  }
+
+  return (
+    <div className="App">
+      <NavBar delToken={delToken} />
+
+      <Routes>
+        <Route path="/login" element={<Folder></Folder>} />
+        <Route path="/forgot" element={<ForgetPassword></ForgetPassword>} />
+        <Route path="/reset" element={<ChangePassword></ChangePassword>} />
+        <Route path="/" element={<Folder></Folder>} />
         <Route path="/folder" element={<Folder></Folder>} />
-        <Route path="/note" element={<Note></Note>} />
+        <Route path="/note/*" element={<Note></Note>} />
+        <Route path="/note/view/*" element={<NoteViewOnly></NoteViewOnly>} />
         <Route path="/noteviewpage" element={<NoteViewOnly></NoteViewOnly>} />
       </Routes>
     </div>

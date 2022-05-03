@@ -35,18 +35,31 @@ const resetPage = (req, res) => {
 
 // @desc    Get note page
 // @route   GET /note
-// @access  Public
-const notePage = async (req, res) => {
-  const notes = await Files.find();
-
+// @access  Private
+const notePage = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const notes = await Files.findById(id);
   res.status(200).json(notes);
-};
+})
 
-const commentPage = async (req, res) => {
-  const comments = await Files.find();
+// @desc    Get note page for view page
+// @route   GET /note/view/:id
+// @access  Private
+const notePageView = asyncHandler(async (req, res) => {
+  const { ObjectId } = mongoose.Types;
+  const id = ObjectId(req.params.id);
+  const note = await Files.findById("62674bdc4b8f4747426debaa");
+  res.status(200).json(note);
+});
 
+// @desc    Get comments from a note
+// @route   GET /comment/:id
+// @access  Private
+const commentPage = asyncHandler(async (req, res) => {
+  const noteId = req.params.id;
+  const comments = await Files.findById(noteId);
   res.status(200).json(comments);
-};
+});
 
 // @desc    Submit new user
 // @route   POST /register
@@ -92,12 +105,8 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    res.status(200);
-    // res.status(201).json({
-    //   _id: user.id,
-    //   name: user.name,
-    //   email: user.email,
-    // });
+    const token = generateToken(user._id);
+    res.status(200).json({success: true, jwt: token});
   } else {
     res.status(400);
     throw new Error("Invalid user data");
@@ -113,14 +122,10 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await bcrypt.compare(password, user.password))) {
-    // res.json({
-    //   _id: user.id,
-    //   name: user.name,
-    //   email: user.email,
-    // });
-    res.status(200).json({success: true})
+    const token = generateToken(user._id);
+    res.status(200).json({success: true, jwt: token});
   } else {
-    res.status(200).json({success: false})
+    res.status(200).json({success: false});
     throw new Error("Invalid credentials");
   }
 });
@@ -207,16 +212,17 @@ const resetUser = asyncHandler(async (req, res) => {
 });
 
 // @desc    Save note
-// @route   POST /note
-// @access  Public
+// @route   POST /note/:id
+// @access  Private
 const noteUser = asyncHandler(async (req, res) => {
 
-  const { email, filename, code } = req.body;
+  const noteId = req.params.id;
+  const { code } = req.body;
 
-  const filter = { email: email };
+  const id = { _id: noteId};
   const update = { code: code };
 
-  const fileExists = await Files.findOneAndUpdate(filter, update);
+  const fileExists = await Files.findOneAndUpdate(id, update);
   if(!fileExists){
     throw new Error(`Invalid Code\n`);
   }
@@ -228,9 +234,13 @@ const noteUser = asyncHandler(async (req, res) => {
 
 });
 
+// @desc    Save comment
+// @route   POST /comment/:id
+// @route   Private
 const commentUser = asyncHandler(async (req, res) => {
   const { email, commentId, removeComment, comments } = req.body;
-  const filter = { email: email };
+  const noteId = req.params.id;
+  const filter = { _id: noteId };
   const ObjectId = mongoose.Types.ObjectId;
   const found = await Files.findOne({comments:{$elemMatch:{_id: ObjectId(commentId)}}});
   if(found && !removeComment){
@@ -263,9 +273,57 @@ const commentUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Gets all notes given user id
+// @route   GET /notes
+// @access  Private
+const getNotes = asyncHandler(async (req, res) => {
+  const notes = await Files.find({ user: req.user.id });
+  res.status(200).json(notes);
+});
+
+
+// @desc Updates one note given note id
+// @route POST /notes/:id
+// @access Private
+const renameNote = asyncHandler(async (req, res) => {;
+  const note = await File.findById(req.params.id);
+
+  if (!note) {
+    res.status(400);
+    throw new Error("Note not found");
+  }
+
+  const { newName } = req.body;
+  const id = { _id: req.params.id };
+  const filename = { filename : newName};
+  const updatedNote = await File.findOneAndUpdate(id, filename);
+
+  res.status(200).json(updatedNote);
+});
+
+// @desc    Creates new note
+// @route   POST /postNotes
+// @access  Private
+const postNotes = asyncHandler(async (req, res) => {
+  const { filename } = req.body;
+  const file = await Files.create({
+    user: req.user.id,
+    email: req.user.email,
+    filename: filename,
+    code: "",
+  });
+
+  if (file) {
+    res.status(200).json(file);
+  } else {
+    res.status(400);
+    throw new Error("Invalid user data");
+  }
+});
+
+
 module.exports = {
   loginPage,
-  //   authenticateUser,
   registerPage,
   registerUser,
   loginUser,
@@ -276,7 +334,11 @@ module.exports = {
   noteUser,
   notePage,
   commentUser,
-  commentPage
+  commentPage,
+  getNotes,
+  postNotes,
+  renameNote,
+  notePageView
 };
 
 
@@ -307,3 +369,6 @@ transporter.sendMail(mailOptions, function (err, info) {
   }
 })
 
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })
+};
