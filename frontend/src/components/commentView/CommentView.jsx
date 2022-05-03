@@ -139,11 +139,6 @@ const CommentView = ({length, newCommentHeight, allComments}) => {
 
   return (
       <div className={styles.comment}>
-        <div className={styles.closeButton} onClick={handleDelete}>
-          <div className={styles.closeButtonChildren}></div>
-          <div className={styles.closeButtonLine1}></div>
-          <div className={styles.closeButtonLine2}></div>
-        </div>
         {titleError ? (
           <>
             <span className={styles.error}>Please populate this field</span>
@@ -182,7 +177,6 @@ const CommentView = ({length, newCommentHeight, allComments}) => {
             className={styles.Hiddenvalueholder}
           />
         </div>
-        {/* <button onClick={handleSubmit}>{type}</button> */}
       </div>
   );
 };

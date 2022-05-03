@@ -1,5 +1,7 @@
 .comment {
   position: relative;
+  background-color: #292C34;
+  border-radius: 4px 4px 4px 4px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; /*Option 6 from https://getcssscan.com/css-box-shadow-examples*/
   width: 350px; /*Fixed width of the comment*/
   padding: 10px;
@@ -32,6 +34,8 @@
   overflow: hidden; /*Remove scroll bar*/
   border: none; /*Removes the outline*/
   outline: none; /*Removes blue outline when clicked*/
+  background: transparent;
+  color: white;
 }
 
 .flexInput {
@@ -45,7 +49,9 @@
   resize: none; /*Remove resizeing feature*/
   overflow: hidden; /*Remove scroll bar*/
   border-radius: 5px; /*Making textarea box have curved edges*/
-  border: 1px solid rgb(200, 200, 200); /*Making textarea outline smaller and be grey: https://stackoverflow.com/a/16156683/18401461*/
+  border: 1px solid rgb(93, 93, 93); /*Making textarea outline smaller and be grey: https://stackoverflow.com/a/16156683/18401461*/
+  background-color: rgb(57, 57, 57);
+  color: white
 }
 
 .closeButton {
@@ -91,4 +97,17 @@
 .Hiddenvalueholder {
   visibility: hidden;
   display: none;
+}
+
+.submitButton {
+  border: 0;
+  background-color:rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+
+
+  color: white;
+}
+
+.submitButton:active {
+  background-color: rgba(43, 199, 72, 0.672);;
 }

@@ -1,5 +1,6 @@
 .comment {
     position: relative;
+    background-color: #292C34;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; /*Option 6 from https://getcssscan.com/css-box-shadow-examples*/
     width: 350px; /*Fixed width of the comment*/
     padding: 10px;
@@ -33,6 +34,8 @@
     overflow: hidden; /*Remove scroll bar*/
     border: none; /*Removes the outline*/
     outline: none; /*Removes blue outline when clicked*/
+    background: transparent;
+    color: white;
   }
   
   
@@ -50,6 +53,8 @@
     /*border-radius: 5px; /*Making textarea box have curved edges*/
     outline: none; /*Removes blue outline when clicked*/
     /*border: 1px solid rgb(200, 200, 200); /*Making textarea outline smaller and be grey: https://stackoverflow.com/a/16156683/18401461*/
+    background-color: rgb(57, 57, 57);
+    color: white
   }
   
   .closeButton {

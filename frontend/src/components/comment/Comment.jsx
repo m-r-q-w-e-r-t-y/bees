@@ -184,7 +184,7 @@ const Comment = ({length, newCommentHeight, allComments}) => {
               className={styles.Hiddenvalueholder}
             />
           </div>
-          <button onClick={handleSubmit}>{type}</button>
+          <button className={styles.submitButton} onClick={handleSubmit}>{type}</button>
         </div>
       </header>
     </div>

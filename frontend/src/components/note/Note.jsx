@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 // import 'prismjs/components/prism-javascript';
 import CodeMirror from "@uiw/react-codemirror";
 import Comment from "../comment/Comment.jsx";
+import { oneDark } from "@codemirror/theme-one-dark";
 import { handleSubmit } from "../comment/Comment.jsx";
 import { python } from "@codemirror/legacy-modes/mode/python"; // npm i @codemirror/legacy-modes
 import { swift } from "@codemirror/legacy-modes/mode/swift"; // npm i @codemirror/legacy-modes
@@ -11,8 +12,12 @@ import { javascript } from "@codemirror/legacy-modes/mode/javascript"; // npm i 
 import { go } from "@codemirror/legacy-modes/mode/go"; // npm i @codemirror/legacy-modes
 import { c } from "@codemirror/legacy-modes/mode/clike"; // npm i @codemirror/legacy-modes
 import { StreamLanguage } from "@codemirror/stream-parser"; // npm i @codemirror/stream-parser
-import "./note.css";
+import styles from "./note.module.css";
 import { Link, use } from "react-router-dom";
+
+// Icons
+import QueueOutlinedIcon from '@mui/icons-material/QueueOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 
 const Note = () => {
   
@@ -187,7 +192,7 @@ const Note = () => {
         // This is a hack :/
 
         <div
-          className="commentsArray"
+          className={styles.commentsArray}
           key={commentsList.length}
           id={commentsList.length}
           style={{
@@ -215,7 +220,7 @@ const Note = () => {
         // This is a hack :/
 
         <div
-          className="commentsArray"
+          className={styles.commentsArray}
           key={commentsList.length}
           id={commentsList.length}
           style={{
@@ -266,85 +271,93 @@ const Note = () => {
   };
 
   return (
-    <div className="App">
-      <link rel="stylesheet" href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-      <header className="App-header">
-        <div>
-          <h1>This is title</h1>
-          <p>This is the description</p>
-          <Link to={`/note/view/${window.location.pathname.split("/")[2]}`}>See the view page of this note</Link>
+    <div className={styles.App}>
+
+      <div>
+        <h1>Title</h1>
+        <p>Summary</p>
+      </div>
+    
+
+      <Link to={`/note/view/${window.location.pathname.split("/")[2]}`}>
+        <div className={styles.viewButton} onClick={handleViewButton}>
+          <VisibilityOutlinedIcon style={{ color: "black"}}></VisibilityOutlinedIcon>
         </div>
-        <Link to="/noteviewpage">
-          <div className="viewButton" onClick={handleViewButton}>
-            <div className="viewButtonChildren"></div>
-            <div className="viewButtonLine1"></div>
-            <div className="viewButtonLine2"></div>
-          </div>
-        </Link>
+      </Link>
 
-        {/* This is diving into two sections. This is for dividing one section left and the other right */}
-        <div className="row">
-          <div className="comments">{commentsList}</div>
-          <div className="code">
-            <div className="codeEditor">
-              <div className="selectLanguage">
-                <select name="" id="" onChange={handleSelectLanguage}>
-                  <option value="py">Python</option>
-                  <option value="swift">Swift</option>
-                  <option value="js">Javascript</option>
-                  <option value="go">Go</option>
-                  <option value="c">C</option>
-                </select>
-              </div>
-              {commentHover ? (
-
-                <>
-                {/* // <button
-                //   id="comment"
-                //   style={{
-                //     position: "absolute",
-                //     display: "inline-block",
-                //     left: commentButtonPoint.x,
-                //     top: commentButtonPoint.y,
-                //   }}
-                //   onClick={addComment}
-                // >
-                //   Click
-                // </button> */}
-
-
-              <span className="material-symbols-outlined" id="comment"
-                  style={{
-                    position: "absolute",
-                    display: "inline-block",
-                    left: commentButtonPoint.x,
-                    top: commentButtonPoint.y,
-                  }}
-                  onClick={addComment}
-                
-              >library_add</span>
-              </>
-              ) : (
-                <></>
-              )}
-              <CodeMirror
-                value={code}
-                height="auto"
-                // height="100vh"
-                width="55vw"
-                extensions={StreamLanguage.define(language)}
-                onChange={(value, viewUpdate) => {
-                  console.log("value:", value);
-                  setCodeField(value);
-                }}
-              />
-              <button onClick={handleSave} style={{ color: "white" }}>
-                SAVE
-              </button>
+      {/* This is diving into two sections. This is for dividing one section left and the other right */}
+      <div className={styles.row}>
+        <div className={styles.comments}>{commentsList}</div>
+        <div className={styles.code}>
+          <div className={styles.codeEditor}>
+            <div className={styles.codeEditorHeader}>
+              <select className={styles.codeEditorHeaderLanguageSelection} name="" id="" onChange={handleSelectLanguage}>
+                <option value="py">Python</option>
+                <option value="swift">Swift</option>
+                <option value="js">Javascript</option>
+                <option value="go">Go</option>
+                <option value="c">C</option>
+              </select>
+              <button className={styles.codeEditorHeaderSave} onClick={handleSave}>Save</button>
             </div>
+            {commentHover ? (
+
+              <>
+              {/* // <button
+              //   id="comment"
+              //   style={{
+              //     position: "absolute",
+              //     display: "inline-block",
+              //     left: commentButtonPoint.x,
+              //     top: commentButtonPoint.y,
+              //   }}
+              //   onClick={addComment}
+              // >
+              //   Click
+              // </button> */}
+
+
+            {/* <span className={styles["material-symbols-outlined"]} id="comment"
+                style={{
+                  position: "absolute",
+                  display: "inline-block",
+                  left: commentButtonPoint.x,
+                }}
+                onClick={addComment}
+              
+            ></span> */}
+
+            <QueueOutlinedIcon className={styles.addComment} id="comment"
+                style={{
+                  position: "absolute",
+                  display: "inline-block",
+                  left: commentButtonPoint.x,
+                  top: commentButtonPoint.y,
+                }}
+                onClick={addComment}></QueueOutlinedIcon>
+
+            </>
+            ) : (
+              <></>
+            )}
+            <CodeMirror
+              value={code}
+              height="auto"
+              // height="100vh"
+              // width="55vw"
+              theme={oneDark}
+              autoFocus={true}
+              extensions={StreamLanguage.define(language)}
+              placeholder="Put code"
+              onChange={(value, viewUpdate) => {
+                console.log("value:", value);
+                setCodeField(value);
+              }}
+            />
+            <div className={styles.codeEditorFooter}></div>
           </div>
         </div>
-      </header>
+      </div>
     </div>
   );
 };
