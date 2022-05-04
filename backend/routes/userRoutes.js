@@ -18,7 +18,8 @@ const {
   getNotes,
   postNotes,
   renameNote,
-  notePageView
+  notePageView,
+  deleteDocument
 } = require("../controllers/userController");
 
 const { protect } = require("../middleware/authMiddleware");
@@ -33,5 +34,6 @@ router.route("/comment/view/:id").get(protect, commentPage);
 router.route("/comment/:id").get(protect, commentPage).post(protect, commentUser);
 router.route("/notes").get(protect, getNotes).post(protect, postNotes);
 router.route("/notes/:id").post(protect, renameNote);
+router.route("/document").post(protect, deleteDocument);
 
 module.exports = router;

@@ -16,7 +16,7 @@ class Menu extends Component {
             <ul className="menuList">
                 <li className="menuItem" onClick={this.props.startNamingHandler}>Rename</li>
                 <li className="menuItem">Open</li>
-                <li className="menuItem">Remove</li>
+                <li className="menuItem" onClick={this.props.deleteDocumentHandler}>Remove</li>
                 <li className="menuItem">Share</li>
             </ul>
         );

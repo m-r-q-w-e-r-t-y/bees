@@ -238,15 +238,26 @@ const noteUser = asyncHandler(async (req, res) => {
 // @route   POST /comment/:id
 // @route   Private
 const commentUser = asyncHandler(async (req, res) => {
+  const { commentId, removeComment, comments } = req.body;
   const noteId = req.params.id;
-  const { commentId, comments } = req.body;
   const filter = { _id: noteId };
   const ObjectId = mongoose.Types.ObjectId;
   const found = await Files.findOne({comments:{$elemMatch:{_id: ObjectId(commentId)}}});
-  if(found){
+  if(found && !removeComment){
     await Files.updateOne(
       {comments:{$elemMatch:{_id: ObjectId(commentId)}}},
       {$set : {"comments.$.title" : comments[0].title, "comments.$.input" : comments[0].input}
+    })
+  }
+  else if(removeComment){
+    await Files.findOneAndUpdate(filter, 
+      { $pull: { 
+        comments: {
+          height : comments[0].height,
+          title : comments[0].title,
+          input: comments[0].input
+          }  
+      } 
     })
   }
   else{
@@ -260,6 +271,12 @@ const commentUser = asyncHandler(async (req, res) => {
       } 
     })
   }
+});
+
+const deleteDocument = asyncHandler(async (req, res) => {
+  const { commentId } = req.body;
+  const ObjectId = mongoose.Types.ObjectId;
+  await Files.findByIdAndDelete({_id: ObjectId(commentId)})
 });
 
 // @desc    Gets all notes given user id
@@ -327,7 +344,8 @@ module.exports = {
   getNotes,
   postNotes,
   renameNote,
-  notePageView
+  notePageView,
+  deleteDocument
 };
 
 
