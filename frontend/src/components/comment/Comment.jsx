@@ -108,18 +108,21 @@ const Comment = ({length, newCommentHeight, allComments}) => {
         setType("Edit");
       }
     }
+    const token = localStorage.getItem("token");
+    const url = window.location.pathname;
+    const id = url.split("/")[2];
     const requestOptions2 = {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', authorization: `Bearer ${token}`  },
     };
-    fetch("http://localhost:5000/comment", requestOptions2)
+    fetch(process.env.REACT_APP_API + "/comment/" + id, requestOptions2)
       .then(res => res.json())
       .then(
         result => {
-          setSavedComments(result[13].comments);
-          if(result[13].comments[length-1].title !== undefined){
+          setSavedComments(result.comments);
+          if(result.comments[length-1].title !== undefined){
             const commentid = document.getElementById("commentid"+length);
-            commentid.value = result[13].comments[length-1]._id;
+            commentid.value = result.comments[length-1]._id;
           }
         },
       )
@@ -136,12 +139,15 @@ const Comment = ({length, newCommentHeight, allComments}) => {
     }
     setHidden(true);
 
+    const token = localStorage.getItem("token");
+    const url = window.location.pathname;
+    const id = url.split("/")[2];
     const requestOptions = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: "savedcomments1@gmail.com", commentId: commentid.value, removeComment: true, comments: [{ height: parseFloat(height.value), title: title.value, input: input.value}]})
+      headers: { 'Content-Type': 'application/json', authorization: `Bearer ${token}`  },
+      body: JSON.stringify({ commentId: commentid.value, removeComment: true, comments: [{ height: parseFloat(height.value), title: title.value, input: input.value}]})
     };
-    fetch("http://localhost:5000/comment", requestOptions)
+    fetch("http://localhost:5000/comment/"+id, requestOptions)
       .then((response) => {
         if (response.ok) {
           return response.json();
