@@ -8,7 +8,6 @@
   /* position: fi; */
 }
 .Navbar .leftSide {
-  flex: 50%;
   display: flex;
   justify-content: left;
   align-items: center;
@@ -23,25 +22,31 @@
 }
 .search-box {
   background: white;
-  height: 32%;
-  width: 30%;
+  /* height: 32%; */
   margin-left: 110px;
   border-radius: 40px;
   padding: 1%;
   border: 1px solid #b8b6b6;
-  align-items: center;
-  flex: content;
-  justify-content: center;
+  /* align-items: center; */
+  /* flex: content; */
+  /* justify-content: center; */
   display: flex;
   /* position: relative; */
   /* position: flex; */
   /* 
       justify-items: center; */
 }
+
+.search-box-contents {
+  padding-left: 5px;
+  padding-right: 10px;
+  display: flex;
+}
+
 .search-box .searchBar {
   background: white;
-  height: 100%;
-  width: 87%;
+  /* height: 2px; */
+  /* width: 100%; */
   border: gray;
   font-size: medium;
   outline: none;
@@ -61,7 +66,7 @@
 }
 
 .rightSide {
-  flex: 50%;
+  /* flex: 50%; */
   display: flex;
   justify-content: right;
   align-items: center;
