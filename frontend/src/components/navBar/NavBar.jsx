@@ -14,12 +14,14 @@ const NavBar = ({delToken}) => {
           <div className="dreamworktitle">CODEHUB</div>
         </Link>
         <div className="search-box">
-          <input
-            className="searchBar"
-            type="text"
-            placeholder=" Search for projects, teammates..."
-          />
-          <button className="fa fa-search"></button>
+          <div className="search-box-contents">
+            <input
+              className="searchBar"
+              type="text"
+              placeholder=" Search notes..."
+            />
+            <button className="fa fa-search"></button>
+          </div>
         </div>
       </div>
       <div className="rightSide">
