@@ -9,6 +9,7 @@ import NavBar from "./components/navBar/NavBar";
 import Note from "./components/note/Note";
 import NoteViewOnly from "./components/noteViewOnly/NoteViewOnly";
 import useToken from "./customHook/useToken";
+import "./App.css"
 
 function App() {
   const { token, setToken, delToken } = useToken();

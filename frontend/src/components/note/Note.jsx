@@ -16,13 +16,17 @@ import styles from "./note.module.css";
 import { Link, use } from "react-router-dom";
 
 // Icons
+import IconButton from '@mui/material/IconButton';
 import QueueOutlinedIcon from '@mui/icons-material/QueueOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import { Container, Icon } from "@mui/material";
+import { padding } from "@mui/system";
 
 const Note = () => {
   
   // Variables for highlighting page
   const [commentButtonPoint, setCommentButtonPoint] = useState({ x: 0, y: 0 }); // Tells Comment button where to position
+  const [highlightPoint, setHighlightPoint] = useState({ x: 0 }); // Tells Comment button where to position
   const [commentHover, setCommentHover] = useState(false); // Shows Comment button on true. Removes in false
   const [commentsList, setCommentsList] = useState([]); // Comment list that shows on the left
   const [visibleComments, setVisibleComments] = useState(true); // Hides or unhides the comments for viewing
@@ -32,6 +36,8 @@ const Note = () => {
   const [commentAmount, setCommentAmount] = useState();
   const [language, setLanguage] = useState(javascript); // Used for syntax highlighting
   const [count, setCount] = useState(0);
+  const [highlights, setHighlights] = useState([]);
+
   // Code that is shown on the CodeMirror editor. Can use MongoDB to make dynamic
   var code = codefield;
   var i = 200;
@@ -57,7 +63,7 @@ const Note = () => {
 
   //Store code in database
   const handleSave = (event) => {
-    console.log(code);
+    // console.log(code);
     event.preventDefault();
     const token = localStorage.getItem("token");
     const url = window.location.pathname;
@@ -82,6 +88,7 @@ const Note = () => {
 
   //Get code from database
   useEffect(() => {
+    document.body.className="notePageBodyBackground";
     const token = localStorage.getItem("token");
     const url = window.location.pathname;
     const id = url.split("/")[2];
@@ -96,7 +103,7 @@ const Note = () => {
       if (result.comments.length > 0) {
         setSavedComments(result.comments);
         //console.log("getComments" + savedComments);
-        console.log(result);
+        // console.log(result);
         setCommentHeight(result.comments.height);
       }
       setCodeField(result.code);
@@ -106,9 +113,9 @@ const Note = () => {
 
   useEffect(() => {
     if (savedComments !== undefined && savedComments.length !== 0) {
-      console.log(savedComments);
+      // console.log(savedComments);
       loadComment(savedComments[count - 1].height, savedComments);
-      console.log(savedComments[count - 1].height);
+      // console.log(savedComments[count - 1].height);
       if (count < savedComments.length) {
         setCount(count + 1);
       }
@@ -125,52 +132,36 @@ const Note = () => {
 
   // Provides the x and y coordinates where the comment button should be. It is not the exact x and y position but the position relative to the div that has the className "code".
   // Disallows highlighting feature for 1. Highlighting blanks, 2. Highlighting '\n', 3. Highlighting anywhere outside the code section
-  const handleHover = useCallback(
-    (event) => {
-      const validSections = [
-        "cm-content",
-        "cm-line",
-        "cm-gutterElement",
-        "cm-gutter cm-foldGutter",
-      ];
+  const handleHover = useCallback( (event) => {
+      const codeEditor = document.getElementsByClassName("cm-content")[0];
       const selection = window.getSelection();
-
-      if (
-        selection.toString().length >= 1 &&
-        selection.toString() !== "\n" &&
-        validSections.includes(event.target.className)
-      ) {
-        const boxOutline = selection.getRangeAt(0).getBoundingClientRect();
-
-        const codeBlock = document
-          .getElementsByClassName("cm-gutter cm-lineNumbers")[0]
-          .getBoundingClientRect();
-        const x = codeBlock.width - 75; // 75 is about the width of the grey number bar. This pushes the button to the left outside the codebox
-        let y = boxOutline.y - codeBlock.top; // Subtracking codeBlock.top because the code section makes selection.y be too big.
-
-        /* Ignore this snippet. Don't delete
-       let y;
-       Use this section if you want to statically set the size of the codeblock
-       if (window.pageYOffset === 0) {
-         y = selection.y-codeBlock.top;
-       }
-       else {
-         y = selection.y;
-       }
-      */
-
-        setCommentButtonPoint({ x: x, y: y });
-        setCommentHover(true);
+      if (selection.anchorNode) {
+        if ( (codeEditor.contains(event.target) && selection.toString().length > 0) || ( (selection.anchorNode.cmView !== undefined) && selection.toString().length > 0) ) {
+          const codeSelection = selection.getRangeAt(0).getBoundingClientRect();
+          const codeEditorTop = document.getElementsByClassName("cm-gutter cm-lineNumbers")[0].getBoundingClientRect().top;
+          const headerHeight = document.getElementById("codeEditorHeader").getBoundingClientRect().height;
+          const gutterWidth = document.getElementsByClassName("cm-gutter")[0].getBoundingClientRect().width;
+          
+          const x = 0 - gutterWidth;
+          const y = headerHeight + codeSelection.top - codeEditorTop;
+  
+          setCommentButtonPoint({ x: x, y: y });
+          setCommentHover(true);
+          setHighlightPoint({ x: 38 });
+        }
       }
     },
-    [setCommentButtonPoint, setCommentHover]
+    [setCommentButtonPoint, setCommentHover, setHighlightPoint]
   );
 
   // Removes the comment button after clicking anywhere that is not the button itself
-  const handleClick = useCallback(
-    (event) => {
-      const id = event.target.id;
-      if (id !== "comment") {
+  const handleClick = useCallback( (event) => {
+      const tag = event.target.tagName;
+      console.log(tag === "path")
+      if (tag === "path" || tag === "svg") {
+        setCommentHover(true);
+      }
+      else {
         setCommentHover(false);
       }
     },
@@ -188,6 +179,30 @@ const Note = () => {
   });
 
   const addComment = (savedComments) => {
+    const codeHighlights = document.getElementsByClassName("cm-selectionLayer")[0].childNodes;
+    const section = document.getElementById("highlightSection");
+    
+    const subContainer = document.createElement("div");
+    subContainer.className = "cm-selectionLayer";
+    subContainer.style.position = "relative";
+    subContainer.style.zIndex = "10000000000";
+    subContainer.style.top = `${commentButtonPoint.y}px`;
+    subContainer.style.left = `${highlightPoint.x}px`;
+    
+    for(let i = 0; i < codeHighlights.length; i++) {
+      const temp = codeHighlights[i];
+      temp.style.backgroundColor = "aqua";
+      temp.style.opacity = "0.2";
+      subContainer.appendChild(temp);
+    }
+
+    section.append(subContainer);
+
+    console.log((subContainer));
+    console.log((section));
+
+    setHighlights(highlights.concat(codeHighlights));
+
     setCommentsList(
       commentsList.concat(
         // This is a hack :/
@@ -245,7 +260,7 @@ const Note = () => {
 
   const handleViewButton = () => {
     if (visibleComments === true) {
-      console.log("Listening for intersections (don't add new comments)");
+      // console.log("Listening for intersections (don't add new comments)");
       setVisibleComments(false);
       for (const element of commentsList) {
         const id = element.props.id;
@@ -257,7 +272,7 @@ const Note = () => {
 
     if (visibleComments === false) {
       setVisibleComments(true);
-      console.log("Not listening for intersections (you can add comments)");
+      // console.log("Not listening for intersections (you can add comments)");
       for (const element of commentsList) {
         const id = element.props.id;
         const comment = document.getElementById(`${id}`);
@@ -274,12 +289,6 @@ const Note = () => {
   return (
     <div className={styles.App}>
 
-      <div>
-        <h1>Title</h1>
-        <p>Summary</p>
-      </div>
-    
-
       <Link to={`/note/view/${window.location.pathname.split("/")[2]}`}>
         <div className={styles.viewButton} onClick={handleViewButton}>
           <VisibilityOutlinedIcon style={{ color: "black"}}></VisibilityOutlinedIcon>
@@ -291,7 +300,8 @@ const Note = () => {
         <div className={styles.comments}>{commentsList}</div>
         <div className={styles.code}>
           <div className={styles.codeEditor}>
-            <div className={styles.codeEditorHeader}>
+            <div id="highlightSection" style={{position: "absolute"}}></div>
+            <div id="codeEditorHeader" className={styles.codeEditorHeader}>
               <select className={styles.codeEditorHeaderLanguageSelection} name="" id="" onChange={handleSelectLanguage}>
                 <option value="py">Python</option>
                 <option value="swift">Swift</option>
@@ -302,45 +312,14 @@ const Note = () => {
               <button className={styles.codeEditorHeaderSave} onClick={handleSave}>Save</button>
             </div>
             {commentHover ? (
-
               <>
-              {/* // <button
-              //   id="comment"
-              //   style={{
-              //     position: "absolute",
-              //     display: "inline-block",
-              //     left: commentButtonPoint.x,
-              //     top: commentButtonPoint.y,
-              //   }}
-              //   onClick={addComment}
-              // >
-              //   Click
-              // </button> */}
+                <QueueOutlinedIcon style={{zIndex:1000000, position: "absolute", left: commentButtonPoint.x, top: commentButtonPoint.y,}} onClick={addComment} className={styles.addComment}/>
+              </>
 
-
-            {/* <span className={styles["material-symbols-outlined"]} id="comment"
-                style={{
-                  position: "absolute",
-                  display: "inline-block",
-                  left: commentButtonPoint.x,
-                }}
-                onClick={addComment}
-              
-            ></span> */}
-
-            <QueueOutlinedIcon className={styles.addComment} id="comment"
-                style={{
-                  position: "absolute",
-                  display: "inline-block",
-                  left: commentButtonPoint.x,
-                  top: commentButtonPoint.y,
-                }}
-                onClick={addComment}></QueueOutlinedIcon>
-
-            </>
             ) : (
               <></>
             )}
+
             <CodeMirror
               value={code}
               height="auto"
@@ -351,12 +330,25 @@ const Note = () => {
               extensions={StreamLanguage.define(language)}
               placeholder="Put code"
               onChange={(value, viewUpdate) => {
-                console.log("value:", value);
+                // console.log("value:", value);
                 setCodeField(value);
               }}
             />
             <div className={styles.codeEditorFooter}></div>
           </div>
+        
+        
+          {/* <div className="cm-selectionLayer" style={{position:"relative" , zIndex: 10000000000, top: -100}} aria-hidden="true">
+            <div className="cm-selectionBackground" style={{backgroundColor: "aqua", opacity: 0.2, left: 68.484375, top: 76.99, width: 732.515625, height: 15.01}}></div>
+            <div className="cm-selectionBackground" style={{backgroundColor: "aqua", opacity: 0.2,left: 37.484375, top: 91.99, width: 763.515625, height: 57.01}}></div>
+            <div className="cm-selectionBackground" style={{backgroundColor: "aqua", opacity: 0.2, left: 37.484375, top: 148.99, width: 94, height: 15.01}}></div>
+          </div>
+
+          <div className="cm-selectionLayer" style={{position:"relative" , zIndex: 1000000, top: -100}} aria-hidden="true">
+            <div className="cm-selectionBackground" style={{ backgroundColor: "aqua", opacity: 0.2, left: 37.484375, top: 148.99, width: 763.515625, height: 15.01}}></div>            
+            <div className="cm-selectionBackground" style={{ backgroundColor: "aqua", opacity: 0.2, left: 37.484375, top: 163.99, width: 763.515625, height: 57.01}}></div> 
+            <div className="cm-selectionBackground" style={{ backgroundColor: "aqua", opacity: 0.2, left: 37.484375, top: 220.99, width: 79, height: 15.01}}></div>
+          </div> */}
         </div>
       </div>
     </div>
