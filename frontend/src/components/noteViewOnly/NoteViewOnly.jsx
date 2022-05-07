@@ -54,6 +54,7 @@ const NoteViewOnly = () => {
 
   //Get code from database
   useEffect(() => {
+    document.body.className="noteViewPageBodyBackground";
     const token = localStorage.getItem("token");
     const noteId = window.location.pathname.split("/")[3];
     const requestOptions = {
@@ -250,12 +251,6 @@ const NoteViewOnly = () => {
 
   return (
     <div className={styles.App}>
-      <header className={styles["App-header"]}>
-        <div>
-          <h1>This is the view page of note { window.location.pathname.split("/")[3] }</h1>
-          <p>This is the description</p>
-        </div>
-
         <Link to={`/note/${window.location.pathname.split("/")[3]}`}>
         <div className={styles.viewButton} onClick={handleViewButton}>
           <EditIcon></EditIcon>
@@ -289,7 +284,6 @@ const NoteViewOnly = () => {
             </div>
           </div>
         </div>
-      </header>
     </div>
   );
 };

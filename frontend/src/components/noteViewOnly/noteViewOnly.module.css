@@ -1,3 +1,7 @@
+.noteViewPageBodyBackground {
+  background-color: white;
+}
+
 .row {
     display: flex;
 }
