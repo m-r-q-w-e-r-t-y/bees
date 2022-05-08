@@ -28,7 +28,6 @@ const NavBar = ({delToken}) => {
         <div className="dropdown">
           <button className="dropbtn">≡</button>
           <div className="dropdown-content">
-            <Link to="/folder">Setting</Link>
             <Link to="/login" onClick={ () => { delToken() } }>Log out</Link>
           </div>
         </div>

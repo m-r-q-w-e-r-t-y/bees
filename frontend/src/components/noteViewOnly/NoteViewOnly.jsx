@@ -125,46 +125,46 @@ const NoteViewOnly = () => {
 
   // Provides the x and y coordinates where the comment button should be. It is not the exact x and y position but the position relative to the div that has the className "code".
   // Disallows highlighting feature for 1. Highlighting blanks, 2. Highlighting '\n', 3. Highlighting anywhere outside the code section
-  const handleHover = useCallback(
-    (event) => {
-      const validSections = [
-        "cm-content",
-        "cm-line",
-        "cm-gutterElement",
-        "cm-gutter cm-foldGutter",
-      ];
-      const selection = window.getSelection();
+  // const handleHover = useCallback(
+  //   (event) => {
+  //     const validSections = [
+  //       "cm-content",
+  //       "cm-line",
+  //       "cm-gutterElement",
+  //       "cm-gutter cm-foldGutter",
+  //     ];
+  //     const selection = window.getSelection();
 
-      if (
-        selection.toString().length >= 1 &&
-        selection.toString() !== "\n" &&
-        validSections.includes(event.target.className)
-      ) {
-        const boxOutline = selection.getRangeAt(0).getBoundingClientRect();
+  //     if (
+  //       selection.toString().length >= 1 &&
+  //       selection.toString() !== "\n" &&
+  //       validSections.includes(event.target.className)
+  //     ) {
+  //       const boxOutline = selection.getRangeAt(0).getBoundingClientRect();
 
-        const codeBlock = document
-          .getElementsByClassName("cm-gutter cm-lineNumbers")[0]
-          .getBoundingClientRect();
-        const x = codeBlock.width - 75; // 75 is about the width of the grey number bar. This pushes the button to the left outside the codebox
-        let y = boxOutline.y - codeBlock.top; // Subtracking codeBlock.top because the code section makes selection.y be too big.
+  //       const codeBlock = document
+  //         .getElementsByClassName("cm-gutter cm-lineNumbers")[0]
+  //         .getBoundingClientRect();
+  //       const x = codeBlock.width - 75; // 75 is about the width of the grey number bar. This pushes the button to the left outside the codebox
+  //       let y = boxOutline.y - codeBlock.top; // Subtracking codeBlock.top because the code section makes selection.y be too big.
 
-        /* Ignore this snippet. Don't delete
-       let y;
-       Use this section if you want to statically set the size of the codeblock
-       if (window.pageYOffset === 0) {
-         y = selection.y-codeBlock.top;
-       }
-       else {
-         y = selection.y;
-       }
-      */
+  //       /* Ignore this snippet. Don't delete
+  //      let y;
+  //      Use this section if you want to statically set the size of the codeblock
+  //      if (window.pageYOffset === 0) {
+  //        y = selection.y-codeBlock.top;
+  //      }
+  //      else {
+  //        y = selection.y;
+  //      }
+  //     */
 
-        setCommentButtonPoint({ x: x, y: y });
-        setCommentHover(true);
-      }
-    },
-    [setCommentButtonPoint, setCommentHover]
-  );
+  //       setCommentButtonPoint({ x: x, y: y });
+  //       setCommentHover(true);
+  //     }
+  //   },
+  //   [setCommentButtonPoint, setCommentHover]
+  // );
 
   // Removes the comment button after clicking anywhere that is not the button itself
   const handleClick = useCallback(
@@ -179,11 +179,11 @@ const NoteViewOnly = () => {
 
   // Handles highlighting and clicking for commenting feature
   useEffect(() => {
-    window.addEventListener("mouseup", handleHover); // This is for highlighting
-    window.addEventListener("mousedown", handleClick); // This is for clicking
+    // window.addEventListener("mouseup", handleHover); // This is for highlighting
+    // window.addEventListener("mousedown", handleClick); // This is for clicking
     return () => {
-      window.removeEventListener("mouseup", handleHover);
-      window.removeEventListener("mousedown", handleClick);
+      // window.removeEventListener("mouseup", handleHover);
+      // window.removeEventListener("mousedown", handleClick);
     };
   });
 

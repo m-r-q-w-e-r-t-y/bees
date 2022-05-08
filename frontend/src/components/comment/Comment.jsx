@@ -205,7 +205,7 @@ const Comment = ({length, newCommentHeight, allComments}) => {
           </div>
           {titleError ? (
             <>
-              <span className="error">Please populate this field</span>
+              <span className={styles.error}>Please populate this field</span>
             </>
           ) : (
             <></>
