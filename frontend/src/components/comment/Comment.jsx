@@ -55,7 +55,7 @@ const Comment = ({length, newCommentHeight, allComments}) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: "savedcomments1@gmail.com", commentId: commentid.value, removeComment: false, comments: [{ height: parseFloat(height.value), title: title.value, input: input.value}]})
       };
-      fetch("http://localhost:5000/comment", requestOptions)
+      fetch(process.env.REACT_APP_API + "/comment", requestOptions)
         .then((response) => {
           if (response.ok) {
             return response.json();
@@ -147,7 +147,7 @@ const Comment = ({length, newCommentHeight, allComments}) => {
       headers: { 'Content-Type': 'application/json', authorization: `Bearer ${token}`  },
       body: JSON.stringify({ commentId: commentid.value, removeComment: true, comments: [{ height: parseFloat(height.value), title: title.value, input: input.value}]})
     };
-    fetch("http://localhost:5000/comment/"+id, requestOptions)
+    fetch(process.env.REACT_APP_API + "/comment/"+id, requestOptions)
       .then((response) => {
         if (response.ok) {
           return response.json();
