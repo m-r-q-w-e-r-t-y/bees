@@ -26,7 +26,7 @@ class DeleteDocument extends Component  {
           headers: { 'Content-Type': 'application/json', authorization: `Bearer ${token}`  },
           body: JSON.stringify({ commentId: this.props.note })
         };
-        fetch("http://localhost:5000/document", requestOptions)
+        fetch(process.env.REACT_APP_API + "/document", requestOptions)
           .then((response) => {
             if (response.ok) {
               return response.json();

@@ -48,7 +48,7 @@ const notePage = asyncHandler(async (req, res) => {
 const notePageView = asyncHandler(async (req, res) => {
   const { ObjectId } = mongoose.Types;
   const id = ObjectId(req.params.id);
-  const note = await Files.findById("62674bdc4b8f4747426debaa");
+  const note = await Files.findById(id);
   res.status(200).json(note);
 });
 

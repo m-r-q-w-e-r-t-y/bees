@@ -1,6 +1,7 @@
 .comment {
     position: relative;
     background-color: #292C34;
+    border-radius: 4px 4px 4px 4px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; /*Option 6 from https://getcssscan.com/css-box-shadow-examples*/
     width: 350px; /*Fixed width of the comment*/
     padding: 10px;
@@ -19,6 +20,7 @@
   }
   
   .textareaInput {
+    font-family: sans-serif;
     font-size: 14px;
     border: none; /*Removes the outline*/
   }
@@ -46,6 +48,7 @@
   }
   
   .input {
+    font-family: sans-serif;
     flex: 1; /*Make text area fill the width of parent*/
     resize: none; /*Remove resizeing feature*/
     border: none; /*Removes the outline*/

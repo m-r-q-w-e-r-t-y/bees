@@ -4,6 +4,9 @@
 
 .row {
     display: flex;
+    margin-top: 110px;
+    margin-left: 110px;
+    margin-right: 110px;
 }
 
 .code {
