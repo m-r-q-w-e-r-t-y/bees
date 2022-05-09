@@ -28,7 +28,6 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar delToken={delToken} />
 
       <Routes>
         <Route path="/login" element={<Folder></Folder>} />

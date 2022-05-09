@@ -6,7 +6,7 @@ import CreateDocument from "./createDocument";
 import Document from "./document";
 import Menu from "./menu.jsx"
 import NameNewDocument from "./nameNewDocument";
-
+import NavBar from "../navBar/NavBar";
 class Folder extends Component {
 
     constructor(props) {
@@ -15,10 +15,15 @@ class Folder extends Component {
         this.cancelNaming = this.cancelNaming.bind(this);
         this.addDocument = this.addDocument.bind(this);
         this.renameDocument = this.renameDocument.bind(this);
+        this.filterDocuments = this.filterDocuments.bind(this);
+        this.cancelFilterDocuments = this.cancelFilterDocuments.bind(this);
+        this.startFilterDocuments = this.startFilterDocuments.bind(this);
     }
     state = {  
         documents: [],
-        renaming: "false"
+        renaming: "false",
+        filtering: "false",
+        proxyDocuments: []
     };
 
     componentDidMount() {
@@ -101,22 +106,58 @@ class Folder extends Component {
             // })
         }
     }
+
+    startFilterDocuments(){
+        this.setState({
+            filtering: "true"
+        })
+    }
+    cancelFilterDocuments(){
+        this.setState({
+            filtering: "false"
+        })
+    }
+    filterDocuments(name){
+        let proxy = this.state.documents.filter(doc => doc.filename === name);
+        this.setState({
+            proxyDocuments: proxy
+        });
+    }
     renderDocuments(){
         if(this.state.documents.length === 0){
             return(
+                <>
+                <NavBar></NavBar>
                 <CreateDocument handler={this.createDocumentHandler}> </CreateDocument>
+                </>
+
             )
         }
         else{
-            return(
-                <>
-                    { this.state.documents.map( (document, i) => (<Document key={i} renameHandler = {this.renameDocument} name={document.filename} noteId={document._id}> </Document>) )}
-                    <CreateDocumentCircle handler = {this.createDocumentHandler}></CreateDocumentCircle>
-                </>
-            )
+            if(this.state.filtering == "false"){
+                return(
+                    <>
+                        <NavBar cancelFilter = {this.cancelFilterDocuments} startFilter = {this.startFilterDocuments}  handleFilter = {this.filterDocuments} documents = {this.state.documents} ></NavBar>
+                        { this.state.documents.map( (document, i) => (<Document key={i} renameHandler = {this.renameDocument} name={document.filename} noteId={document._id}> </Document>) )}
+                        <CreateDocumentCircle handler = {this.createDocumentHandler}></CreateDocumentCircle>
+                    </>
+                )
+            }
+            else{
+                return(
+                    <>
+                        <NavBar cancelFilter = {this.cancelFilterDocuments} startFilter = {this.startFilterDocuments} handleFilter = {this.filterDocuments} documents = {this.state.documents} ></NavBar>
+                        { this.state.proxyDocuments.map( (document, i) => (<Document key={i} renameHandler = {this.renameDocument} name={document.filename} noteId={document._id}> </Document>) )}
+                        <CreateDocumentCircle handler = {this.createDocumentHandler}></CreateDocumentCircle>
+                    </>
+                )
+            }
+
         }
 
     }
+
+
     renderNaming(){
         if(this.state.renaming === "true"){
             return <NameNewDocument cancelHandler = {this.cancelNaming} addDocumentHandler = {this.addDocument}></NameNewDocument>
