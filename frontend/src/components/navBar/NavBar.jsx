@@ -53,6 +53,9 @@ export default class NavBar extends Component {
         <div className="rightSide">
           <div className="dropdown">
             <button className="dropbtn">≡</button>
+            {/* <div className="dropdown-content">
+            <Link to="/login" onClick={ () => { delToken() } }>Log out</Link>
+          </div> */}
           </div>
         </div>
       </div>
